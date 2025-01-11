@@ -1,7 +1,8 @@
 import 'package:fluentui_icons/fluentui_icons.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/screens/home_screen.dart';
+import 'package:flutter_application_1/screens/search/search_screen.dart';
+
+import '../screens/home/home_screen.dart';
 
 class BottomNavBar extends StatefulWidget {
   const BottomNavBar({super.key});
@@ -11,15 +12,15 @@ class BottomNavBar extends StatefulWidget {
 }
 
 class _BottomNavBarState extends State<BottomNavBar> {
+  //change index for BottomNavBar
+  int _selectedIndex = 0;
+
   final appScreen = [
     const HomeScreen(),
-    const Text("Search"),
+    const SearchScreen(),
     const Text("Ticket"),
     const Text("Profile")
   ];
-
-  //change index for BottomNavBar
-  int _selectedIndex = 0;
 
   void _onItemTapped(int index) {
     setState(() {

@@ -1,11 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/base/res/styles/app_styles.dart';
+import 'package:flutter_application_1/base/utils/app_routes.dart';
 
 class AppSectionHeading extends StatelessWidget {
-  const AppSectionHeading(
-      {super.key, required this.leftText, required this.rightText});
+  const AppSectionHeading({
+    super.key,
+    required this.leftText,
+    required this.rightText,
+    required this.func,
+  });
+
   final String leftText;
   final String rightText;
+  final VoidCallback func; // Corrected type
 
   @override
   Widget build(BuildContext context) {
@@ -17,12 +24,12 @@ class AppSectionHeading extends StatelessWidget {
           style: AppStyles.sectionHeadingLeft,
         ),
         InkWell(
-          onTap: () {},
+          onTap: func, // Use the func parameter
           child: Text(
             rightText,
             style: AppStyles.textStyle.copyWith(color: AppStyles.primaryColor),
           ),
-        )
+        ),
       ],
     );
   }

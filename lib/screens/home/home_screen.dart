@@ -1,11 +1,15 @@
 import 'package:fluentui_icons/fluentui_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/base/res/media.dart';
+import 'package:flutter_application_1/base/utils/hotel_list.dart';
 import 'package:flutter_application_1/base/utils/ticket_json.dart';
 import 'package:flutter_application_1/base/widgets/ticket_view.dart';
+import 'package:flutter_application_1/screens/home/widgets/hotel.dart';
 
-import '../base/res/styles/app_styles.dart';
-import '../base/widgets/app_section_headingText.dart';
+import '../../base/res/styles/app_styles.dart';
+import '../../base/utils/app_routes.dart';
+import '../../base/widgets/app_section_headingText.dart';
+
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -25,6 +29,7 @@ class HomeScreen extends StatelessWidget {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -68,8 +73,11 @@ class HomeScreen extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 40),
-                  const AppSectionHeading(
-                      leftText: "Upcoming Meetings", rightText: "View All"),
+                  AppSectionHeading(
+                      leftText: "Upcoming Meetings",
+                      rightText: "View All",
+                      func: () =>
+                          Navigator.pushNamed(context, AppRoutes.allTickets)),
                   const SizedBox(
                     height: 20,
                   ),
@@ -81,7 +89,25 @@ class HomeScreen extends StatelessWidget {
                             ticket: singleTicket,
                           ); // Assuming TicketView is a widget
                         }).toList(), // Convert Iterable to List<Widget>
-                      ))
+                      )),
+                  const SizedBox(height: 40),
+                  AppSectionHeading(
+                      leftText: "Hotels",
+                      rightText: "View All",
+                      func: () =>
+                          Navigator.pushNamed(context, AppRoutes.allTickets)),
+
+                  // Hotel Card View
+                  const SizedBox(height: 25),
+                  SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: hotelList
+                            .map((hotelItem) => HotelCard(
+                                  hotel: hotelItem,
+                                ))
+                            .toList(),
+                      )),
                 ],
               ),
             ),
