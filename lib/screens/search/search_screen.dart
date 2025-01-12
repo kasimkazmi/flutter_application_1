@@ -31,7 +31,10 @@ class SearchScreen extends StatelessWidget {
           SizedBox(
             height: 20,
           ),
-          const TapBar(),
+          const TapBar(
+            leftTab: "All Airlines",
+            rightTab: "Hotels",
+          ),
           const SizedBox(height: 25),
           const TextIcon(
             icon: Icons.flight_takeoff_rounded,

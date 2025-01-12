@@ -11,10 +11,12 @@ class AppStyles {
   static Color hotelKhakiColor = const Color(0xFFd2bdb6);
   static Color tapBarBgColor = const Color(0xFFF4F6FD);
   static Color circleColor = const Color(0xff189999);
-
+  static Color ticketBGColor = const Color(0xffffffff);
+  static Color bigDotColor = const Color(0xFF8ACCF7);
+  static Color planIconColor = const Color(0xFFBACCF7);
 
   static TextStyle textStyle = TextStyle(
-      fontSize: 16, color: AppStyles.textColor, fontWeight: FontWeight.w500);
+      fontSize: 16, color: AppStyles.bgColor, fontWeight: FontWeight.w500);
 
   static TextStyle greetingsLabel =
       TextStyle(fontSize: 17, fontWeight: FontWeight.w500, color: textColor);

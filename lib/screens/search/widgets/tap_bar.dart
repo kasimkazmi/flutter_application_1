@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/base/res/styles/app_styles.dart';
 
 class TapBar extends StatelessWidget {
-  const TapBar({super.key});
+  const TapBar({super.key, required this.leftTab, required this.rightTab});
+  final String leftTab;
+  final String rightTab;
 
   @override
   Widget build(BuildContext context) {
@@ -13,10 +15,10 @@ class TapBar extends StatelessWidget {
       child: Row(
         children: [
           AppTabs(
-            tabText: "All Airlines",
+            tabText: leftTab,
           ),
           AppTabs(
-            tabText: "Hotels",
+            tabText: rightTab,
             tabColor: true,
             tabBorder: true,
           ),
