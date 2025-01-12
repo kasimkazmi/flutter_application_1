@@ -6,8 +6,9 @@ class TextStyleThird extends StatelessWidget {
   final String text;
   final TextAlign textAlign;
   final  bool? isColor;
+  final CrossAxisAlignment? crossAxisAlignment;
   const TextStyleThird(
-      {super.key, required this.text, this.textAlign = TextAlign.start, this.isColor});
+      {super.key, required this.text, this.textAlign = TextAlign.start, this.isColor, this.crossAxisAlignment,});
 
   @override
   Widget build(BuildContext context) {

@@ -33,8 +33,9 @@ class _BottomNavBarState extends State<BottomNavBar> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: appScreen[_selectedIndex],
+      body: IndexedStack(
+        index: _selectedIndex,
+        children: appScreen,
       ),
       bottomNavigationBar: BottomNavigationBar(
           currentIndex: _selectedIndex,

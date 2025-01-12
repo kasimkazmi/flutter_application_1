@@ -13,7 +13,7 @@ class TextStyleForth extends StatelessWidget {
     return Text(
       text,
       style: isColor == null
-          ? AppStyles.textStyle.copyWith(color:  Colors.white, fontSize: 18)
+          ? AppStyles.textStyle.copyWith(color: Colors.white, fontSize: 18)
           : AppStyles.textStyle.copyWith(color: AppStyles.textColor),
     );
   }
