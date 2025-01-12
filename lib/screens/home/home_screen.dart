@@ -10,7 +10,6 @@ import '../../base/res/styles/app_styles.dart';
 import '../../base/utils/app_routes.dart';
 import '../../base/widgets/app_section_headingText.dart';
 
-
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
@@ -94,8 +93,8 @@ class HomeScreen extends StatelessWidget {
                   AppSectionHeading(
                       leftText: "Hotels",
                       rightText: "View All",
-                      func: () =>
-                          Navigator.pushNamed(context, AppRoutes.allTickets)),
+                      func: () => Navigator.pushNamed(
+                          context, AppRoutes.allHotelScreen)),
 
                   // Hotel Card View
                   const SizedBox(height: 25),

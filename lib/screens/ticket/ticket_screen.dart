@@ -24,7 +24,7 @@ class _TicketScreenState extends State<TicketScreen> {
 
     // Now you can safely access ModalRoute after initState is complete
     final args = ModalRoute.of(context)?.settings.arguments as Map?;
-    print("object=>>>>>>>,$args");
+    // print("object=>>>>>>>,$args");
     if (args != null && args.containsKey("index")) {
       ticketIndex = args["index"];
     } else {

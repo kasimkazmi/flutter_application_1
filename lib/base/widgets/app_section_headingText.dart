@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/base/res/styles/app_styles.dart';
-import 'package:flutter_application_1/base/utils/app_routes.dart';
 
 class AppSectionHeading extends StatelessWidget {
   const AppSectionHeading({
