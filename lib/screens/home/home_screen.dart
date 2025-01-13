@@ -87,7 +87,6 @@ class HomeScreen extends StatelessWidget {
                             .map((singleTicket) => GestureDetector(
                                 onTap: () {
                                   var index = ticketList.indexOf(singleTicket);
-                                  print("aosm =====>$index");
                                   Navigator.pushNamed(
                                       context, AppRoutes.ticketScreen,
                                       arguments: {"index": index});

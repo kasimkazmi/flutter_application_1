@@ -14,6 +14,8 @@ class AppStyles {
   static Color ticketBGColor = const Color(0xffffffff);
   static Color bigDotColor = const Color(0xFF8ACCF7);
   static Color planIconColor = const Color(0xFFBACCF7);
+  static Color profileLocationBG = const Color(0xFFFEF4F3);
+  static Color profileStatusTextColor = const Color(0xFF526799);
 
   static TextStyle textStyle = TextStyle(
       fontSize: 16, color: AppStyles.bgColor, fontWeight: FontWeight.w500);
