@@ -83,13 +83,23 @@ class HomeScreen extends StatelessWidget {
                   SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
                       child: Row(
-                        children: ticketList.map((singleTicket) {
-                          return TicketView(
-                            ticket: singleTicket,
-                          ); // Assuming TicketView is a widget
-                        }).toList(), // Convert Iterable to List<Widget>
+                        children: ticketList
+                            .map((singleTicket) => GestureDetector(
+                                onTap: () {
+                                  var index = ticketList.indexOf(singleTicket);
+                                  print("aosm =====>$index");
+                                  Navigator.pushNamed(
+                                      context, AppRoutes.ticketScreen,
+                                      arguments: {"index": index});
+                                },
+                                child: TicketView(
+                                  ticket: singleTicket,
+                                )))
+                            .toList(), // Convert Iterable to List<Widget>
                       )),
                   const SizedBox(height: 40),
+
+                  // View All Button
                   AppSectionHeading(
                       leftText: "Hotels",
                       rightText: "View All",
@@ -102,8 +112,17 @@ class HomeScreen extends StatelessWidget {
                       scrollDirection: Axis.horizontal,
                       child: Row(
                         children: hotelList
-                            .map((hotelItem) => HotelCard(
-                                  hotel: hotelItem,
+                            .map((hotelItem) => GestureDetector(
+                                  onTap: () {
+                                    var index = hotelList.indexOf(hotelItem);
+                                    print("aosm =====>$index");
+                                    Navigator.pushNamed(
+                                        context, AppRoutes.hotelDetail,
+                                        arguments: {"index": index});
+                                  },
+                                  child: HotelCard(
+                                    hotel: hotelItem,
+                                  ),
                                 ))
                             .toList(),
                       )),

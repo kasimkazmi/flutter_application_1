@@ -3,36 +3,78 @@ List<Map<String, dynamic>> hotelList = [
     "image": "hotel_room_view_1.png",
     "placeType": "Open Space",
     "destination": "London",
-    "price": 24
+    "detailsDescription":
+        "A spacious open area with stunning views of the city. Enjoy the vibrant atmosphere of London with easy access to local attractions, parks, and restaurants. Perfect for families or groups looking for a comfortable stay.",
+    "price": 24,
+    "images": [
+      "hotel_room_view_1.png",
+      "hotel_room_view_2.png",
+      "hotel_room_view_3.png",
+    ]
   },
   {
     "image": "hotel_room_view_2.png",
     "placeType": "Apartment",
     "destination": "Paris",
-    "price": 18
+    "detailsDescription":
+        "A cozy apartment located in the heart of Paris, perfect for couples. This charming space features a fully equipped kitchen, a romantic balcony overlooking the streets, and is just a short walk from iconic landmarks like the Eiffel Tower and Louvre Museum.",
+    "price": 18,
+    "images": [
+      "hotel_room_view_1.png",
+      "hotel_room_view_2.png",
+      "hotel_room_view_3.png",
+    ]
   },
   {
     "image": "hotel_room_view_3.png",
     "placeType": "Luxury Suite",
     "destination": "New York",
-    "price": 45
+    "detailsDescription":
+        "An opulent suite with modern amenities and breathtaking skyline views. Experience the luxury of a king-sized bed, a spacious living area, and a marble bathroom. Located in the heart of Manhattan, you'll be close to Broadway shows, Central Park, and world-class dining.",
+    "price": 45,
+    "images": [
+      "hotel_room_view_1.png",
+      "hotel_room_view_2.png",
+      "hotel_room_view_3.png",
+    ]
   },
   {
     "image": "hotel_room_view_1.png",
     "placeType": "Penthouse",
     "destination": "Tokyo",
-    "price": 80
+    "detailsDescription":
+        "A luxurious penthouse offering panoramic views of Tokyo's skyline. This exquisite space features contemporary decor, a private terrace, and access to exclusive amenities such as a rooftop pool and fitness center. Ideal for those seeking a lavish experience in the bustling city.",
+    "price": 80,
+    "images": [
+      "hotel_room_view_1.png",
+      "hotel_room_view_2.png",
+      "hotel_room_view_3.png",
+    ]
   },
   {
     "image": "hotel_room_view_2.png",
     "placeType": "Garden View",
     "destination": "Barcelona",
-    "price": 30
+    "detailsDescription":
+        "A charming room with a beautiful garden view, ideal for relaxation. Enjoy the tranquility of the lush surroundings while being just minutes away from the vibrant culture of Barcelona. The room includes a comfortable bed, a private balcony, and access to a communal garden.",
+    "price": 30,
+    "images": [
+      "hotel_room_view_1.png",
+      "hotel_room_view_2.png",
+      "hotel_room_view_3.png",
+    ]
   },
   {
     "image": "hotel_room_view_3.png",
     "placeType": "Open Space",
     "destination": "Sydney",
-    "price": 28
+    "detailsDescription":
+        "A bright and airy open space with easy access to Sydney's attractions. This modern accommodation features large windows, a fully equipped kitchen, and a cozy living area. Located near the iconic Sydney Opera House and Bondi Beach, it's perfect for adventure seekers and beach lovers.",
+    "price": 28,
+    "images": [
+      "hotel_room_view_1.png",
+      "hotel_room_view_2.png",
+      "hotel_room_view_3.png",
+    ]
   }
 ];

@@ -56,12 +56,13 @@ class _TicketScreenState extends State<TicketScreen> {
               const SizedBox(
                 height: 20,
               ),
+
               Container(
-                  padding: const EdgeInsets.only(left: 16),
-                  child: TicketView(
-                    ticket: ticketList[ticketIndex],
-                    isColor: true,
-                  )),
+                    padding: const EdgeInsets.only(left: 16),
+                    child: TicketView(
+                      ticket: ticketList[ticketIndex],
+                      isColor: true,
+                    )),
               const SizedBox(
                 height: 2,
               ),
@@ -180,7 +181,7 @@ class _TicketScreenState extends State<TicketScreen> {
                       borderRadius: BorderRadius.circular(15),
                       child: BarcodeWidget(
                           height: 70,
-                          data: "https://www.kasimkazmi.me",
+                          data: "https://www.ddd.me",
                           drawText: false,
                           color: AppStyles.textColor,
                           width: double.infinity,
@@ -207,6 +208,7 @@ class _TicketScreenState extends State<TicketScreen> {
             position: false,
           )
         ],
+
       ),
     );
   }

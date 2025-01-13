@@ -67,9 +67,9 @@ class _HotelDetailState extends State<HotelDetail> {
                       child: Text(
                           style: TextStyle(shadows: [
                             Shadow(
-                                offset: Offset(2.0, 2.3),
+                                offset: Offset(2.0, 2.0),
                                 blurRadius: 10.0,
-                                color: AppStyles.primaryColor)
+                                color: AppStyles.ticketBottomColor)
                           ], color: Colors.white, fontSize: 26),
                           hotelList[index]["placeType"])),
                 )
@@ -80,13 +80,14 @@ class _HotelDetailState extends State<HotelDetail> {
               delegate: SliverChildListDelegate([
             Padding(
               padding: EdgeInsets.all(16.0),
-              child: Text(
-                  "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer tincidunt urna rhoncus aliquam molestie. Donec dictum dolor diam, facilisis sodales felis aliquet sollicitudin. Aenean ac dui enim. Proin luctus, sapien eu dignissim sollicitudin, diam dolor egestas velit, quis rhoncus augue dui ac leo. Sed rutrum nibh nec mauris lobortis, et faucibus turpis tristique. Ut suscipit tincidunt tristique. In ac laoreet lacus, non consectetur turpis. Nunc volutpat lectus eget aliquam facilisis. Proin accumsan elit in commodo dapibus. In ac sem aliquam, eleifend risus in, sagittis lectus. Ut lectus nulla, faucibus et iaculis fermentum, interdum ac velit. Aliquam non laoreet mi. Integer facilisis felis nulla, a dictum mi volutpat id. Ut sed mi pellentesque, faucibus ligula ut, malesuada ipsu. Donec suscipit tortor a neque hendrerit, ac convallis mi tempus. In hac habitasse platea dictumst. Interdum et malesuada fames ac ante ipsum primis in faucibus. Nunc vitae sagittis elit. Etiam tristique est et sapien fermentum, eu sollicitudin tortor varius. Nullam pharetra cursus quam sit amet sagittis. Sed luctus at ante vestibulum sollicitudin. Duis luctus nulla eu dapibus mollis. Sed efficitur leo nec est egestas, aliquet gravida leo lacinia. In tortor tortor, vestibulum egestas metus et, mollis efficitur sem. Ut accumsan sapien eget molestie accumsan.Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Aenean euismod ullamcorper nisl, eget sodales sem. Curabitur nec dignissim magna, sed consectetur nisl. In auctor varius pretium. Duis feugiat lacinia eros, sed consectetur neque ultrices sit amet. Aenean finibus euismod lobortis. Ut turpis sem, placerat in cursus ut, porttitor a ligula. In euismod rhoncus dolor, et commodo sapien gravida eu."),
+              child: ExpandedText(
+                text: hotelList[index]["detailsDescription"],
+              ),
             ),
             Padding(
               padding: EdgeInsets.all(16.0),
               child: Text(
-                "More Text",
+                "More Images",
                 style: TextStyle(
                     color: AppStyles.ticketTopColor,
                     fontSize: 20.0,
@@ -97,16 +98,60 @@ class _HotelDetailState extends State<HotelDetail> {
               height: 200,
               child: ListView.builder(
                   scrollDirection: Axis.horizontal,
-                  itemCount: 10,
-                  itemBuilder: (context, index) {
+                  itemCount: hotelList[index]["images"].length,
+                  itemBuilder: (context, imageIndex) {
                     return Container(
-                        margin: EdgeInsets.all(16),
-                        child: Image.network("https://fakeimg.pl/200x200"));
+                      margin: EdgeInsets.all(16),
+                      child: Image.asset(
+                          "${AppMedia.assetsPath}/${hotelList[index]["images"][imageIndex]}"),
+                    );
                   }),
             )
           ]))
         ],
       ),
+    );
+  }
+}
+
+class ExpandedText extends StatefulWidget {
+  final String text;
+  const ExpandedText({super.key, required this.text});
+
+  @override
+  State<ExpandedText> createState() => _ExpandedTextState();
+}
+
+class _ExpandedTextState extends State<ExpandedText> {
+  bool isExpanded = false;
+  _toggleExpansion() {
+    setState(() {
+      isExpanded = !isExpanded;
+    });
+    print("Value $isExpanded");
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    var textWidget = Text(
+      widget.text,
+      maxLines: isExpanded ? null : 3,
+      overflow: isExpanded ? TextOverflow.visible : TextOverflow.ellipsis,
+    );
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        textWidget,
+        GestureDetector(
+          onTap: () {
+            _toggleExpansion();
+          },
+          child: Text(
+            isExpanded ? "Show Less" : "Show More",
+            style: AppStyles.textStyle.copyWith(color: AppStyles.primaryColor),
+          ),
+        )
+      ],
     );
   }
 }
