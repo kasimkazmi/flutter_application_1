@@ -23,6 +23,9 @@ class AppStyles {
   static TextStyle greetingsLabel =
       TextStyle(fontSize: 17, fontWeight: FontWeight.w500, color: textColor);
 
+  static TextStyle greyHeadlineLabel =
+      TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.grey.shade500);
+
   static TextStyle headLineStyle2 = TextStyle(
     fontSize: 26,
     fontWeight: FontWeight.w600,
