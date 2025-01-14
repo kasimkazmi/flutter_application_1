@@ -5,7 +5,6 @@ import 'package:flutter_application_1/base/res/media.dart';
 import 'package:flutter_application_1/base/res/styles/app_styles.dart';
 import 'package:flutter_application_1/base/widgets/text_column_layout.dart';
 import 'package:flutter_application_1/base/widgets/text_style_Forth.dart';
-import 'package:flutter_application_1/base/widgets/text_style_third.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});

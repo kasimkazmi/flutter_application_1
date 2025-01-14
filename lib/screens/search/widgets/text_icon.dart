@@ -23,7 +23,7 @@ class TextIcon extends StatelessWidget {
           ),
           Text(
             text,
-            style: AppStyles.textStyle,
+            style: AppStyles.textStyle.copyWith(color: AppStyles.textColor),
           )
         ],
       ),
