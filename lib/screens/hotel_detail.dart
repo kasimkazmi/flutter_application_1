@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/base/res/media.dart';
 import 'package:flutter_application_1/base/res/styles/app_styles.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 
 import '../base/utils/hotel_list.dart';
+import '../controller/text_expansion_controller.dart';
 
 class HotelDetail extends StatefulWidget {
   const HotelDetail({super.key});
@@ -114,44 +117,38 @@ class _HotelDetailState extends State<HotelDetail> {
   }
 }
 
-class ExpandedText extends StatefulWidget {
+class ExpandedText extends StatelessWidget {
+  ExpandedText({super.key, required this.text});
   final String text;
-  const ExpandedText({super.key, required this.text});
 
-  @override
-  State<ExpandedText> createState() => _ExpandedTextState();
-}
-
-class _ExpandedTextState extends State<ExpandedText> {
-  bool isExpanded = false;
-  _toggleExpansion() {
-    setState(() {
-      isExpanded = !isExpanded;
-    });
-    print("Value $isExpanded");
-  }
-
+  final TexExpansionController controller = Get.put(TexExpansionController());
   @override
   Widget build(BuildContext context) {
-    var textWidget = Text(
-      widget.text,
-      maxLines: isExpanded ? null : 3,
-      overflow: isExpanded ? TextOverflow.visible : TextOverflow.ellipsis,
-    );
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        textWidget,
-        GestureDetector(
-          onTap: () {
-            _toggleExpansion();
-          },
-          child: Text(
-            isExpanded ? "Show Less" : "Show More",
-            style: AppStyles.textStyle.copyWith(color: AppStyles.primaryColor),
-          ),
-        )
-      ],
-    );
+    return Obx(() {
+      var textWidget = Text(
+        text,
+        maxLines: controller.isExpanded.value ? null : 3,
+        overflow: controller.isExpanded.value
+            ? TextOverflow.visible
+            : TextOverflow.ellipsis,
+      );
+
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          textWidget,
+          GestureDetector(
+            onTap: () {
+              controller.toggleExpansion();
+            },
+            child: Text(
+              controller.isExpanded.value ? "Show Less" : "Show More",
+              style:
+                  AppStyles.textStyle.copyWith(color: AppStyles.primaryColor),
+            ),
+          )
+        ],
+      );
+    });
   }
 }
