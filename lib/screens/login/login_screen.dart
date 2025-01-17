@@ -111,7 +111,6 @@ class LoginScreen extends StatelessWidget {
                                       print(
                                           "Password: ${passwordController.text}");
 
-
                                       User? user =
                                           await _authService.signInWithEmail(
                                         emailController.text,

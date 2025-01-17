@@ -8,7 +8,8 @@ import 'package:flutter_application_1/screens/home/all_tickets_screen.dart';
 import 'package:flutter_application_1/screens/hotel_detail.dart';
 import 'package:flutter_application_1/screens/login/login_screen.dart';
 import 'package:flutter_application_1/screens/ticket/ticket_screen.dart';
-import 'package:get/get_navigation/src/root/get_material_app.dart';
+import 'package:get/get.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,25 +20,50 @@ void main() async {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      initialRoute: AppRoutes.loginScreen,
       debugShowCheckedModeBanner: false,
+      home: AuthWrapper(), // Use AuthWrapper to manage authentication state
       routes: {
         AppRoutes.homePage: (context) => BottomNavBar(), // Home route
         AppRoutes.allTickets: (context) =>
             const AllTickets(), // All tickets route
         AppRoutes.ticketScreen: (context) =>
-            const TicketScreen(), //Single ticket route
+            const TicketScreen(), // Single ticket route
         AppRoutes.allHotelScreen: (context) =>
-            const AllHotels(), //All Hotels  route
+            const AllHotels(), // All Hotels route
         AppRoutes.hotelDetail: (context) =>
-            const HotelDetail(), //Hotel Detail  route
-        AppRoutes.loginScreen: (context) => LoginScreen(), //Login Detail  route
+            const HotelDetail(), // Hotel Detail route
+        AppRoutes.loginScreen: (context) => LoginScreen(), // Login route
         AppRoutes.registerScreen: (context) =>
-            const RegisterScreen(), //Login Detail  route
+            RegisterScreen(), // Register route
+      },
+    );
+  }
+}
+
+class AuthWrapper extends StatelessWidget {
+  const AuthWrapper({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<User?>(
+      stream: FirebaseAuth.instance.authStateChanges(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.active) {
+          User? user = snapshot.data;
+          if (user == null) {
+            // User is not logged in, show login screen
+            return LoginScreen();
+          } else {
+            // User is logged in, show home screen
+            return BottomNavBar();
+          }
+        } else {
+          // While waiting for the connection, show a loading indicator
+          return Center(child: CircularProgressIndicator());
+        }
       },
     );
   }

@@ -17,7 +17,7 @@ class BottomNavBar extends StatelessWidget {
     const HomeScreen(),
     const SearchScreen(),
     const TicketScreen(),
-    const ProfileScreen(),
+    ProfileScreen(),
   ];
 
   @override

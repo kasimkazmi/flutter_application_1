@@ -9,6 +9,7 @@ import 'package:flutter_application_1/screens/home/widgets/hotel.dart';
 import '../../base/res/styles/app_styles.dart';
 import '../../base/utils/app_routes.dart';
 import '../../base/widgets/app_section_headingText.dart';
+import '../../base/widgets/logout_button.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -104,6 +105,7 @@ class HomeScreen extends StatelessWidget {
                       rightText: "View All",
                       func: () => Navigator.pushNamed(
                           context, AppRoutes.allHotelScreen)),
+                  LogoutButton(),
 
                   // Hotel Card View
                   const SizedBox(height: 25),
