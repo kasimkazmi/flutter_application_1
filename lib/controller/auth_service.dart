@@ -9,9 +9,13 @@ class AuthService {
     try {
       UserCredential userCredential = await _auth.signInWithEmailAndPassword(
           email: email, password: password);
-      return userCredential.user;
+      return userCredential.user; // Return the user if successful
     } catch (e) {
-      print("Error signin in with email$e");
+      // Handle specific Firebase exceptions
+      if (e is FirebaseAuthException) {
+        print("FirebaseAuthException: ${e.message}");
+        throw e; // Rethrow the exception to handle it in the UI
+      }
       return null;
     }
   }
@@ -61,5 +65,6 @@ class AuthService {
       print("Error signing in with phone:$e");
       return null;
     }
+    return null;
   }
 }
