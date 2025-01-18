@@ -5,18 +5,43 @@ import 'package:flutter_application_1/base/utils/hotel_list.dart';
 import 'package:flutter_application_1/base/utils/ticket_json.dart';
 import 'package:flutter_application_1/base/widgets/ticket_view.dart';
 import 'package:flutter_application_1/screens/home/widgets/hotel.dart';
+import 'package:get/get.dart';
 
 import '../../base/res/styles/app_styles.dart';
 import '../../base/utils/app_routes.dart';
 import '../../base/widgets/app_section_headingText.dart';
-import '../../base/widgets/logout_button.dart';
+import '../../controller/auth_controller.dart';
+import '../../controller/user_controller.dart';
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+  HomeScreen({super.key});
+
+  // Accessing the AuthController and UserController
+  final AuthController authController = Get.find<AuthController>();
+  final UserController userController = Get.find<UserController>();
 
   @override
   Widget build(BuildContext context) {
-    //Colum
+
+    // Trigger user details fetching when screen loads and user is logged in
+    if (!userController.isLoading.value && authController.isLoggedIn.value) {
+      userController.fetchUserDetails();
+    }
+
+    // Show error message if there is any
+    if (userController.errorMessage.value != null) {
+      return Center(
+        child: Text(
+          userController.errorMessage.value!,
+          style: const TextStyle(color: Colors.red),
+        ),
+      );
+    }
+
+    // If user data is fetched successfully, proceed with building UI
+    final userData = userController.userData.value!;
+    final username = userData['username'] ?? 'No Username';
+
     //ListView
     return Scaffold(
         backgroundColor: AppStyles.bgColor,
@@ -41,8 +66,7 @@ class HomeScreen extends StatelessWidget {
                           const SizedBox(
                             height: 5,
                           ),
-                          Text("Book Tickets ",
-                              style: AppStyles.headLineStyle2),
+                          Text(username, style: AppStyles.headLineStyle2),
                         ],
                       ),
                       Container(
@@ -105,7 +129,6 @@ class HomeScreen extends StatelessWidget {
                       rightText: "View All",
                       func: () => Navigator.pushNamed(
                           context, AppRoutes.allHotelScreen)),
-                  LogoutButton(),
 
                   // Hotel Card View
                   const SizedBox(height: 25),

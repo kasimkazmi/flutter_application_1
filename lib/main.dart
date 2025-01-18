@@ -7,13 +7,21 @@ import 'package:flutter_application_1/screens/home/all_hotels.dart';
 import 'package:flutter_application_1/screens/home/all_tickets_screen.dart';
 import 'package:flutter_application_1/screens/hotel_detail.dart';
 import 'package:flutter_application_1/screens/login/login_screen.dart';
+import 'package:flutter_application_1/screens/profile/edit_profile.dart';
+import 'package:flutter_application_1/screens/splash/splash_screen.dart';
 import 'package:flutter_application_1/screens/ticket/ticket_screen.dart';
 import 'package:get/get.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+
+import 'controller/auth_controller.dart';
+import 'controller/user_controller.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  // Initialize AuthController and UserController lazily
+  Get.lazyPut<AuthController>(() => AuthController());
+  Get.lazyPut<UserController>(() => UserController());
+
   runApp(const MyApp());
 }
 
@@ -22,48 +30,27 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Access the AuthController after it's initialized
+    final AuthController authController = Get.find<AuthController>();
+
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      home: AuthWrapper(), // Use AuthWrapper to manage authentication state
+      home: Obx(() {
+        // Show splash screen while loading auth state
+        return authController.isLoggedIn.value ? BottomNavBar() : LoginScreen();
+      }),
+
+      // Use AuthWrapper to manage authentication state
       routes: {
-        AppRoutes.homePage: (context) => BottomNavBar(), // Home route
-        AppRoutes.allTickets: (context) =>
-            const AllTickets(), // All tickets route
-        AppRoutes.ticketScreen: (context) =>
-            const TicketScreen(), // Single ticket route
-        AppRoutes.allHotelScreen: (context) =>
-            const AllHotels(), // All Hotels route
-        AppRoutes.hotelDetail: (context) =>
-            const HotelDetail(), // Hotel Detail route
-        AppRoutes.loginScreen: (context) => LoginScreen(), // Login route
-        AppRoutes.registerScreen: (context) =>
-            RegisterScreen(), // Register route
-      },
-    );
-  }
-}
-
-class AuthWrapper extends StatelessWidget {
-  const AuthWrapper({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return StreamBuilder<User?>(
-      stream: FirebaseAuth.instance.authStateChanges(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.active) {
-          User? user = snapshot.data;
-          if (user == null) {
-            // User is not logged in, show login screen
-            return LoginScreen();
-          } else {
-            // User is logged in, show home screen
-            return BottomNavBar();
-          }
-        } else {
-          // While waiting for the connection, show a loading indicator
-          return Center(child: CircularProgressIndicator());
-        }
+        AppRoutes.homePage: (context) => BottomNavBar(),
+        AppRoutes.allTickets: (context) => AllTickets(),
+        AppRoutes.ticketScreen: (context) => TicketScreen(),
+        AppRoutes.allHotelScreen: (context) => AllHotels(),
+        AppRoutes.hotelDetail: (context) => HotelDetail(),
+        AppRoutes.loginScreen: (context) => LoginScreen(),
+        AppRoutes.registerScreen: (context) => RegisterScreen(),
+        AppRoutes.editScreen: (context) => EditProfile(),
+        AppRoutes.splashScreen: (context) => SplashScreen(),
       },
     );
   }

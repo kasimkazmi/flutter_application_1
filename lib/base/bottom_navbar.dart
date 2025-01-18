@@ -14,7 +14,7 @@ class BottomNavBar extends StatelessWidget {
   final BottomNavControler controller = Get.put(BottomNavControler());
 
   final appScreen = [
-    const HomeScreen(),
+    HomeScreen(),
     const SearchScreen(),
     const TicketScreen(),
     ProfileScreen(),
