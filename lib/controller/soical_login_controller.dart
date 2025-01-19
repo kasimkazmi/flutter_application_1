@@ -22,7 +22,7 @@ class SocialLoginController {
           await _auth.signInWithCredential(credential);
       return userCredential.user;
     } catch (e) {
-      print("Google Sign-In Error: $e");
+      // print("Google Sign-In Error: $e");
       return null;
     }
   }
@@ -41,11 +41,11 @@ class SocialLoginController {
             await _auth.signInWithCredential(credential);
         return userCredential.user;
       } else {
-        print("Facebook Sign-In Error: ${result.status}");
+        // print("Facebook Sign-In Error: ${result.status}");
         return null;
       }
     } catch (e) {
-      print("Facebook Sign-In Error: $e");
+      // print("Facebook Sign-In Error: $e");
       return null;
     }
   }

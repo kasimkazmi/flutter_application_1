@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/base/res/styles/app_styles.dart';
 
-class FindTicketButton extends StatelessWidget {
-  const FindTicketButton({super.key});
+class AppButton extends StatelessWidget {
+  final String label;
+
+  const AppButton({super.key, required this.label});
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +16,7 @@ class FindTicketButton extends StatelessWidget {
       ),
       child: Center(
         child: Text(
-          "find tickets",
+          label,
           style: AppStyles.textStyle.copyWith(color: Colors.white),
         ),
       ),

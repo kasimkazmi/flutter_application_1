@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_application_1/base/widgets/text_style_Forth.dart';
+import 'package:flutter_application_1/base/widgets/text_style_forth.dart';
 import 'package:flutter_application_1/base/widgets/text_style_third.dart';
 
 class TextColumnLayout extends StatelessWidget {

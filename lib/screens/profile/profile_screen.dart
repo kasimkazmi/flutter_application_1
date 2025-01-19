@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/base/res/media.dart';
 import 'package:flutter_application_1/base/res/styles/app_styles.dart';
 import 'package:flutter_application_1/base/widgets/text_column_layout.dart';
-import 'package:flutter_application_1/base/widgets/text_style_Forth.dart';
+import 'package:flutter_application_1/base/widgets/text_style_forth.dart';
 import 'package:get/get.dart';
 
 import '../../base/utils/app_routes.dart';
@@ -11,8 +11,14 @@ import '../../base/widgets/logout_button.dart';
 import '../../controller/auth_controller.dart';
 import '../../controller/user_controller.dart';
 
-class ProfileScreen extends StatelessWidget {
-  ProfileScreen({super.key});
+class ProfileScreen extends StatefulWidget {
+  const ProfileScreen({super.key});
+
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
   // Accessing the AuthController and UserController
   final AuthController authController = Get.find<AuthController>();
   final UserController userController = Get.find<UserController>();
@@ -24,15 +30,15 @@ class ProfileScreen extends StatelessWidget {
       userController.fetchUserDetails();
     }
 
-    // Show error message if there is any
-    if (userController.errorMessage.value != null) {
-      return Center(
-        child: Text(
-          userController.errorMessage.value!,
-          style: const TextStyle(color: Colors.red),
-        ),
-      );
+    @override
+    void initState() {
+      super.initState();
+      // Fetch user details when the screen loads
+      if (authController.isLoggedIn.value) {
+        userController.fetchUserDetails();
+      }
     }
+
 // If user data is fetched successfully, proceed with building UI
     final userData = userController.userData.value!;
     final username = userData['username'] ?? 'No Username';

@@ -1,5 +1,4 @@
 // Replace ButtonElevated with this new widget inside the LoginScreen code
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class GradientCircleButton extends StatelessWidget {

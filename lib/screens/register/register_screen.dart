@@ -1,5 +1,4 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/base/res/styles/app_styles.dart';
 import 'package:flutter_application_1/base/widgets/background_shape.dart';
@@ -48,36 +47,60 @@ class RegisterScreen extends StatelessWidget {
                         .copyWith(fontSize: 45, letterSpacing: 2),
                   ),
                   const SizedBox(height: 40),
-                  InputText(
-                    label: "Username ",
+                  // Email Login
+                  TextFormField(
                     controller: usernameController,
-                    prefixIcon: null,
+                    decoration: InputDecoration(
+                      labelText: 'Username',
+                      prefixIcon: Icon(Icons.person),
+                    ),
+                    validator: validationController.validateUsername,
                   ),
                   const SizedBox(height: 16),
-                  InputText(
-                    label: "Email ",
+
+                  TextFormField(
                     controller: emailController,
-                    prefixIcon: null,
+                    decoration: InputDecoration(
+                      labelText: 'Email',
+                      prefixIcon: Icon(Icons.email),
+                    ),
+                    validator: validationController.validateEmail,
                   ),
+
                   const SizedBox(height: 16),
-                  InputText(
-                    label: "Password ",
+                  TextFormField(
                     controller: passwordController,
-                    prefixIcon: null,
+                    decoration: InputDecoration(
+                      labelText: 'Password',
+                      prefixIcon: Icon(Icons.lock),
+                    ),
+                    obscureText: true,
+                    validator: validationController.validatePassword,
                   ),
+
                   const SizedBox(height: 16),
-                  InputText(
-                    label: "Confirm Password",
+                  TextFormField(
                     controller: confirmPasswordController,
-                    prefixIcon: null,
+                    decoration: InputDecoration(
+                      labelText: 'Confirm Password',
+                      prefixIcon: Icon(Icons.lock),
+                    ),
+                    obscureText: true,
+
+                    validator: (value) =>
+                        validationController.validateConfirmPassword(
+                            value,
+                            passwordController
+                                .text), // Use a closure to pass both values
                   ),
+
                   const SizedBox(height: 16),
                   GradientCircleButton(onPressed: () async {
                     if (_formKey.currentState!.validate()) {
                       // Print the email and password for debugging
-                      print("Username: ${usernameController.text}");
-                      print("Email: ${emailController.text}");
-                      print("Password: ${passwordController.text}");
+                      // print("Username: ${usernameController.text}");
+                      // print("Email: ${emailController.text}");
+                      // print("Password: ${passwordController.text}");
 
                       // Call the registerWithEmail method from AuthController
                       User? user = await _authService.registerWithEmail(
@@ -90,6 +113,11 @@ class RegisterScreen extends StatelessWidget {
                         // Register Successful, Navigate to Home Screen
                         Get.offAllNamed(AppRoutes.homePage);
                       } else {
+                        // Check if context is still valid (mounted)
+                        if (!context.mounted) {
+                          return; // Early return if widget is disposed
+                        }
+
                         //   Show error message if register failed
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(

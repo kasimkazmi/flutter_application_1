@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/base/res/media.dart';
 import 'package:flutter_application_1/base/res/styles/app_styles.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 
 import '../base/utils/hotel_list.dart';
 import '../controller/text_expansion_controller.dart';
@@ -18,9 +17,8 @@ class _HotelDetailState extends State<HotelDetail> {
   late int index = 0;
   @override
   void didChangeDependencies() {
-    // TODO: implement didChangeDependencies
     var args = ModalRoute.of(context)!.settings.arguments as Map;
-    print(args["index"]);
+    // print(args["index"]);
     index = args["index"];
     super.didChangeDependencies();
   }

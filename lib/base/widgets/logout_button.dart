@@ -17,8 +17,12 @@ class LogoutButton extends StatelessWidget {
           await _auth.signOut();
           // Navigate to login screen or show a message
           Get.offAllNamed(AppRoutes.loginScreen);
+
+          // Check if context is still valid (mounted)
+          if (!context.mounted) return; // Early return if widget is disposed
+
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Successfully logged out')),
+            SnackBar(content: Text("Successfully logged out")),
           );
         } catch (e) {
           ScaffoldMessenger.of(context).showSnackBar(

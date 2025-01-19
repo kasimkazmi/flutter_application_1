@@ -15,8 +15,8 @@ class BottomNavBar extends StatelessWidget {
 
   final appScreen = [
     HomeScreen(),
-    const SearchScreen(),
-    const TicketScreen(),
+    SearchScreen(),
+    TicketScreen(),
     ProfileScreen(),
   ];
 
@@ -26,7 +26,7 @@ class BottomNavBar extends StatelessWidget {
       return Scaffold(
         body: IndexedStack(
           index: controller.selectedIndex.value,
-          children: appScreen,
+          children: appScreen, // Ensure all screens are properly initialized
         ),
         bottomNavigationBar: BottomNavigationBar(
             currentIndex: controller.selectedIndex.value,

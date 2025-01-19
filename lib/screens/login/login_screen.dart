@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/base/res/styles/app_styles.dart';
 import 'package:flutter_application_1/base/utils/app_routes.dart';
 import 'package:flutter_application_1/base/widgets/gradient_circle_button.dart';
+import 'package:flutter_application_1/screens/login/forgot_screen.dart';
 import 'package:get/get.dart';
 import '../../base/widgets/background_shape.dart';
 import '../../controller/auth_service.dart';
@@ -107,10 +108,6 @@ class LoginScreen extends StatelessWidget {
                                   // Proceed with login
                                   onPressed: () async {
                                     if (_formKey.currentState!.validate()) {
-                                      print("Email: ${emailController.text}");
-                                      print(
-                                          "Password: ${passwordController.text}");
-
                                       User? user =
                                           await _authService.signInWithEmail(
                                         emailController.text,
@@ -120,6 +117,10 @@ class LoginScreen extends StatelessWidget {
                                         // Navigate to home screen
                                         Get.offAllNamed(AppRoutes.homePage);
                                       } else {
+                                        // Check if context is still valid (mounted)
+                                        if (!context.mounted) {
+                                          return; // Early return if widget is disposed
+                                        }
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(
                                           SnackBar(
@@ -136,6 +137,7 @@ class LoginScreen extends StatelessWidget {
                                 TextButton(
                                   onPressed: () {
                                     // Handle forgot password action
+                                    Get.to(ForgotPasswordScreen());
                                   },
                                   child: const Text(
                                     'Forgot ?',
@@ -197,6 +199,10 @@ class LoginScreen extends StatelessWidget {
                                         // Navigate to home screen
                                         Get.offAllNamed(AppRoutes.homePage);
                                       } else {
+                                        // Check if context is still valid (mounted)
+                                        if (!context.mounted)
+                                          return; // Early return if widget is disposed
+
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(
                                           SnackBar(

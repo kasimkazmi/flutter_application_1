@@ -9,20 +9,20 @@ class AuthService {
   Future<Map<String, dynamic>?> getUserDetails() async {
     try {
       User? user = _auth.currentUser;
-      print("Current user: $user"); // Debug user info
+      // print("Current user: $user"); // Debug user info
       if (user == null) {
         throw Exception("No user is currently signed in.");
       }
       DocumentSnapshot snapshot =
           await _firestore.collection('users').doc(user.uid).get();
-      print("Firestore document: ${snapshot.data()}"); // Debug document info
+      // print("Firestore document: ${snapshot.data()}"); // Debug document info
       if (!snapshot.exists) {
         throw Exception("User document not found in Firestore..");
       }
       return snapshot.data() as Map<String, dynamic>?;
     } catch (e) {
-      print("Error fetching user details: $e");
-      throw e;
+      // print("Error fetching user details: $e");
+      rethrow;
     }
   }
 
@@ -36,8 +36,8 @@ class AuthService {
     } catch (e) {
       // Handle specific Firebase exceptions
       if (e is FirebaseAuthException) {
-        print("FirebaseAuthException: ${e.message}");
-        throw e; // Rethrow the exception to handle it in the UI
+        // print("FirebaseAuthException: ${e.message}");
+        rethrow; // Rethrow the exception to handle it in the UI
       }
       return null;
     }
@@ -65,7 +65,7 @@ class AuthService {
       }
       return user;
     } catch (e) {
-      print("Error register: $e");
+      // print("Error register: $e");
       return null;
     }
   }
@@ -80,7 +80,7 @@ class AuthService {
           await _auth.signInWithCredential(credential);
         },
         verificationFailed: (FirebaseAuthException e) {
-          print("Verification failed:${e.message}");
+          // print("Verification failed:${e.message}");
         },
         codeSent: (String verificationId, int? resendToken) {
           onCodeSent(verificationId); // Callback to handle code sent
@@ -96,9 +96,19 @@ class AuthService {
       PhoneAuthCredential credential = PhoneAuthProvider.credential(
           verificationId: verificationId, smsCode: smsCode);
     } catch (e) {
-      print("Error signing in with phone:$e");
+      // print("Error signing in with phone:$e");
       return null;
     }
     return null;
+  }
+
+  // Send password rest email
+  Future<void> sendPasswordRestEmail(String email) async {
+    try {
+      await _auth.sendPasswordResetEmail(email: email);
+    } catch (e) {
+//     Handle error (e.g, user not found)
+      rethrow;
+    }
   }
 }

@@ -22,21 +22,22 @@ class ValidationController {
     }
     return null;
   }
-}
-// Validate Username
 
-String? validateUsername(String? value) {
-  if (value == null || value.isEmpty) {
-    return 'Username is required';
+  // Validate Username
+
+  String? validateUsername(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Username is required';
+    }
+    return null;
   }
-  return null;
-}
 
-// Validate ConfirmPassword
+  // Validate ConfirmPassword
 
-String? validateConfirmPassword(String? value, String password) {
-  if (value != password) {
-    return 'Passwords do not match';
+  String? validateConfirmPassword(String? value, String? password) {
+    if (value != password || value == null || value.isEmpty) {
+      return 'Passwords do not match';
+    }
+    return null;
   }
-  return null;
 }

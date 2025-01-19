@@ -6,6 +6,7 @@ import 'package:flutter_application_1/screens/Register/register_screen.dart';
 import 'package:flutter_application_1/screens/home/all_hotels.dart';
 import 'package:flutter_application_1/screens/home/all_tickets_screen.dart';
 import 'package:flutter_application_1/screens/hotel_detail.dart';
+import 'package:flutter_application_1/screens/login/forgot_screen.dart';
 import 'package:flutter_application_1/screens/login/login_screen.dart';
 import 'package:flutter_application_1/screens/profile/edit_profile.dart';
 import 'package:flutter_application_1/screens/splash/splash_screen.dart';
@@ -18,6 +19,7 @@ import 'controller/user_controller.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+
   // Initialize AuthController and UserController lazily
   Get.lazyPut<AuthController>(() => AuthController());
   Get.lazyPut<UserController>(() => UserController());
@@ -36,11 +38,11 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       home: Obx(() {
-        // Show splash screen while loading auth state
+        // Check if the user is logged in and navigate accordingly
         return authController.isLoggedIn.value ? BottomNavBar() : LoginScreen();
       }),
 
-      // Use AuthWrapper to manage authentication state
+      // Use named routes for navigation throughout the app
       routes: {
         AppRoutes.homePage: (context) => BottomNavBar(),
         AppRoutes.allTickets: (context) => AllTickets(),
@@ -50,6 +52,7 @@ class MyApp extends StatelessWidget {
         AppRoutes.loginScreen: (context) => LoginScreen(),
         AppRoutes.registerScreen: (context) => RegisterScreen(),
         AppRoutes.editScreen: (context) => EditProfile(),
+        AppRoutes.forgotPasswordScreen: (context) => ForgotPasswordScreen(),
         AppRoutes.splashScreen: (context) => SplashScreen(),
       },
     );

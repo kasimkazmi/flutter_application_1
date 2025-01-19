@@ -5,13 +5,16 @@ class InputText extends StatelessWidget {
       {super.key,
       required this.label,
       this.obscureText = false,
+      this.iconColor = const Color(0xFFBFC2DF),
+      this.iconSize = 24.0,
       required this.controller,
       required this.prefixIcon});
   final String label;
   final bool obscureText;
   final IconData? prefixIcon;
   final TextEditingController controller;
-
+  final Color iconColor;
+  final double iconSize;
   @override
   Widget build(BuildContext context) {
     return TextField(
@@ -19,11 +22,14 @@ class InputText extends StatelessWidget {
       obscureText: obscureText,
       decoration: InputDecoration(
           prefixIcon: prefixIcon != null
-              ? Icon(prefixIcon)
+              ? Icon(
+                  prefixIcon,
+                  color: iconColor,
+                )
               : null, // only add icon if it's not null
           labelText: label,
           labelStyle:
-              TextStyle(color: Colors.black45, fontWeight: FontWeight.w600),
+              TextStyle(color: Colors.grey, fontWeight: FontWeight.w600),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
             borderSide: BorderSide(color: Colors.purple, width: 2),

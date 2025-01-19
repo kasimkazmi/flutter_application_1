@@ -4,7 +4,7 @@ import 'package:flutter_application_1/base/widgets/app_layoutbuiller_widget.dart
 import 'package:flutter_application_1/base/widgets/big_ciricle.dart';
 import 'package:flutter_application_1/base/widgets/big_dot.dart';
 import 'package:flutter_application_1/base/widgets/text_column_layout.dart';
-import 'package:flutter_application_1/base/widgets/text_style_Forth.dart';
+import 'package:flutter_application_1/base/widgets/text_style_forth.dart';
 import 'package:flutter_application_1/base/widgets/text_style_third.dart';
 
 class TicketView extends StatelessWidget {
