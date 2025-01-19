@@ -1,12 +1,17 @@
-import 'package:fluentui_icons/fluentui_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/base/res/media.dart';
 import 'package:flutter_application_1/base/utils/hotel_list.dart';
 import 'package:flutter_application_1/base/utils/ticket_json.dart';
 import 'package:flutter_application_1/base/utils/top_tab_list.dart';
 import 'package:flutter_application_1/base/widgets/ticket_view.dart';
+import 'package:flutter_application_1/screens/events/events_screen.dart';
+import 'package:flutter_application_1/screens/flight/flight_screen.dart';
+import 'package:flutter_application_1/screens/food/food_screen.dart';
+import 'package:flutter_application_1/screens/home/all_hotels.dart';
 import 'package:flutter_application_1/screens/home/widgets/hotel.dart';
 import 'package:flutter_application_1/screens/home/widgets/top_navbar.dart';
+import 'package:flutter_application_1/screens/hotel/hotel_search.dart';
+import 'package:flutter_application_1/screens/search/search.dart';
 import 'package:get/get.dart';
 
 import '../../base/res/styles/app_styles.dart';
@@ -147,9 +152,24 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _topNavBarSection(BuildContext context) {
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: TopNavbar(tabs: topNavList), // Pass the list to TopNavbar
+    return TopNavbar(
+      tabs: topNavList, // Use the predefined list directly
+      onTabSelected: (int index) {
+        // Handle tab selection dynamically
+        if (index case 0) {
+          print('Navigating to Hotels');
+          Get.to(HotelSearch());
+        } else if (index case 1) {
+          print('Navigating to Flights');
+          Get.to(FlightScreen());
+        } else if (index case 2) {
+          print('Navigating to Foods');
+          Get.to(FoodScreen());
+        } else if (index case 3) {
+          print('Navigating to Events');
+          Get.to(EventsScreen());
+        }
+      },
     );
   }
 

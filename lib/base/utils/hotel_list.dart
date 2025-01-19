@@ -1,5 +1,6 @@
 List<Map<String, dynamic>> hotelList = [
   {
+    "id": 1,
     "image": "hotel_room_view_1.png",
     "placeType": "Open Space",
     "destination": "London",
@@ -13,6 +14,7 @@ List<Map<String, dynamic>> hotelList = [
     ]
   },
   {
+    "id": 2,
     "image": "hotel_room_view_2.png",
     "placeType": "Apartment",
     "destination": "Paris",
@@ -26,6 +28,7 @@ List<Map<String, dynamic>> hotelList = [
     ]
   },
   {
+    "id": 3,
     "image": "hotel_room_view_3.png",
     "placeType": "Luxury Suite",
     "destination": "New York",
@@ -39,6 +42,7 @@ List<Map<String, dynamic>> hotelList = [
     ]
   },
   {
+    "id": 4,
     "image": "hotel_room_view_1.png",
     "placeType": "Penthouse",
     "destination": "Tokyo",
@@ -52,6 +56,7 @@ List<Map<String, dynamic>> hotelList = [
     ]
   },
   {
+    "id": 5,
     "image": "hotel_room_view_2.png",
     "placeType": "Garden View",
     "destination": "Barcelona",
@@ -65,6 +70,7 @@ List<Map<String, dynamic>> hotelList = [
     ]
   },
   {
+    "id": 6,
     "image": "hotel_room_view_3.png",
     "placeType": "Open Space",
     "destination": "Sydney",

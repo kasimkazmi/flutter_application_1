@@ -1,28 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/base/res/styles/app_styles.dart';
 import 'package:flutter_application_1/base/widgets/app_section_heading.dart';
-import 'package:flutter_application_1/screens/search/widgets/find_ticket_button.dart';
-import 'package:flutter_application_1/screens/search/widgets/promotion_cards.dart';
-import 'package:flutter_application_1/screens/search/widgets/tap_bar.dart';
+import 'package:flutter_application_1/screens/flight/widgets/promotion_cards.dart';
+import 'package:flutter_application_1/screens/flight/widgets/tap_bar.dart';
 
 import '../../base/utils/app_routes.dart';
+import '../../base/widgets/app_button.dart';
 import '../../base/widgets/input_text.dart';
 
-class SearchScreen extends StatelessWidget {
-  SearchScreen({super.key});
+class FlightScreen extends StatelessWidget {
+  FlightScreen({super.key});
   final TextEditingController arrivalController = TextEditingController();
   final TextEditingController departureController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(title: null),
       backgroundColor: AppStyles.bgColor,
       body: ListView(
-        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
         children: [
-          SizedBox(
-            height: 40,
-          ),
           Text(
             "What are \n you looking for ?",
             style: AppStyles.headLineStyle2.copyWith(fontSize: 45),
@@ -30,16 +28,12 @@ class SearchScreen extends StatelessWidget {
           SizedBox(
             height: 20,
           ),
-          const TapBar(
-            leftTab: "All Airlines",
-            rightTab: "Hotels",
-          ),
-          const SizedBox(height: 20),
 
           InputText(
             label: 'Departure',
-            controller: arrivalController,
-            prefixIcon: Icons.flight_land_rounded,
+            controller: departureController,
+            iconColor: AppStyles.ticketTopColor,
+            prefixIcon: Icons.flight_takeoff_rounded,
           ),
           const SizedBox(
             height: 15,
@@ -47,6 +41,7 @@ class SearchScreen extends StatelessWidget {
           InputText(
             label: 'Arrival',
             controller: arrivalController,
+            iconColor: AppStyles.ticketBottomColor,
             prefixIcon: Icons.flight_land_rounded,
           ),
 
@@ -54,7 +49,10 @@ class SearchScreen extends StatelessWidget {
             height: 30,
           ),
 
-          AppButton(label: "find tickets"),
+          AppButton(
+            label: "find tickets",
+            onPressed: () {},
+          ),
           const SizedBox(
             height: 20,
           ),

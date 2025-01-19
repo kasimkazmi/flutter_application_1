@@ -30,15 +30,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
       userController.fetchUserDetails();
     }
 
-    @override
-    void initState() {
-      super.initState();
-      // Fetch user details when the screen loads
-      if (authController.isLoggedIn.value) {
-        userController.fetchUserDetails();
-      }
-    }
-
 // If user data is fetched successfully, proceed with building UI
     final userData = userController.userData.value!;
     final username = userData['username'] ?? 'No Username';

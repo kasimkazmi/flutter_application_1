@@ -14,13 +14,15 @@ class HotelDetail extends StatefulWidget {
 }
 
 class _HotelDetailState extends State<HotelDetail> {
-  late int index = 0;
+  late Map<String, dynamic> hotel; // Store the hotel data
   @override
   void didChangeDependencies() {
-    var args = ModalRoute.of(context)!.settings.arguments as Map;
-    // print(args["index"]);
-    index = args["index"];
     super.didChangeDependencies();
+    var args = ModalRoute.of(context)!.settings.arguments as Map;
+    int hotelId = args["id"]; // Get the hotel id from arguments
+
+    // Find the hotel by id
+    hotel = hotelList.firstWhere((hotel) => hotel["id"] == hotelId);
   }
 
   @override
@@ -55,7 +57,7 @@ class _HotelDetailState extends State<HotelDetail> {
                 Positioned.fill(
                   child: Image.asset(
                       fit: BoxFit.cover,
-                      "${AppMedia.assetsPath}/${hotelList[index]["image"]}"),
+                      "${AppMedia.assetsPath}/${hotel["image"]}"),
                 ),
                 Positioned(
                   bottom: 20,
@@ -72,7 +74,7 @@ class _HotelDetailState extends State<HotelDetail> {
                                 blurRadius: 10.0,
                                 color: AppStyles.ticketBottomColor)
                           ], color: Colors.white, fontSize: 26),
-                          hotelList[index]["placeType"])),
+                          hotel["placeType"])),
                 )
               ],
             )),
@@ -82,7 +84,7 @@ class _HotelDetailState extends State<HotelDetail> {
             Padding(
               padding: EdgeInsets.all(16.0),
               child: ExpandedText(
-                text: hotelList[index]["detailsDescription"],
+                text: hotel["detailsDescription"],
               ),
             ),
             Padding(
@@ -99,12 +101,12 @@ class _HotelDetailState extends State<HotelDetail> {
               height: 200,
               child: ListView.builder(
                   scrollDirection: Axis.horizontal,
-                  itemCount: hotelList[index]["images"].length,
+                  itemCount: hotel["images"].length,
                   itemBuilder: (context, imageIndex) {
                     return Container(
                       margin: EdgeInsets.all(16),
                       child: Image.asset(
-                          "${AppMedia.assetsPath}/${hotelList[index]["images"][imageIndex]}"),
+                          "${AppMedia.assetsPath}/${hotel["images"][imageIndex]}"),
                     );
                   }),
             )

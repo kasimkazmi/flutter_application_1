@@ -1,20 +1,27 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/base/widgets/app_button.dart';
 import '../../base/res/styles/app_styles.dart';
 import '../../controller/auth_service.dart'; // Import your AuthService
 import '../../controller/validation_controller.dart';
 
-class ForgotPasswordScreen extends StatelessWidget {
-  ForgotPasswordScreen({super.key});
+class ForgotPasswordScreen extends StatefulWidget {
+  const ForgotPasswordScreen({super.key});
 
+  @override
+  State<ForgotPasswordScreen> createState() => _ForgotPasswordScreenState();
+}
+
+class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   final ValidationController validationController = ValidationController();
+
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
   final TextEditingController emailController = TextEditingController();
+
   String? _message;
 
   // Method to send the password reset link
-  void _sendResetLink(BuildContext context) async {
+  void _sendResetLink(context) async {
     // Validate the form
     if (_formKey.currentState!.validate()) {
       String email = emailController.text; // Get the email from the controller

@@ -1,12 +1,12 @@
 import 'package:fluentui_icons/fluentui_icons.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/screens/search/search_screen.dart';
 import 'package:flutter_application_1/screens/ticket/ticket_screen.dart';
 import 'package:get/get.dart';
 
 import '../controller/bottom_nav_controller.dart';
 import '../screens/home/home_screen.dart';
 import '../screens/profile/profile_screen.dart';
+import '../screens/search/search.dart';
 
 class BottomNavBar extends StatelessWidget {
   BottomNavBar({super.key});

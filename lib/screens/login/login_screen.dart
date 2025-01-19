@@ -10,21 +10,62 @@ import '../../controller/auth_service.dart';
 import '../../controller/soical_login_controller.dart';
 import '../../controller/validation_controller.dart';
 
-class LoginScreen extends StatelessWidget {
-  LoginScreen({super.key});
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
 
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
   final AuthService _authService = AuthService();
+
   final ValidationController validationController = ValidationController();
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
   final SocialLoginController socialLoginController = SocialLoginController();
+
   final TextEditingController emailController = TextEditingController();
+
   final TextEditingController passwordController = TextEditingController();
+
   final TextEditingController phoneController = TextEditingController();
+
   String? verificationId;
 
+  // Login Submit Logic
+  void _logInSubmit(context) async {
+    try {
+      if (_formKey.currentState!.validate()) {
+        User? user = await _authService.signInWithEmail(
+          emailController.text,
+          passwordController.text,
+        );
+        if (user != null) {
+          // Navigate to home screen
+          Get.offAllNamed(AppRoutes.homePage);
+        } else {
+          // Handle login failure
+
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+                content: Text('Login failed. Please check your credentials.')),
+          );
+        }
+      }
+    } catch (e) {
+      // Handle specific Firebase exceptions
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error: Invalid Credential'),
+        ),
+      );
+    }
+  }
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(context) {
     return Scaffold(
       backgroundColor: AppStyles.bgColor,
       body: Stack(
@@ -78,58 +119,12 @@ class LoginScreen extends StatelessWidget {
                             ),
                             const SizedBox(height: 16),
 
-                            // ElevatedButton(
-                            //   onPressed: () async {
-                            //     if (_formKey.currentState!.validate()) {
-                            //       User? user =
-                            //           await _authService.signInWithEmail(
-                            //         emailController.text,
-                            //         passwordController.text,
-                            //       );
-                            //       if (user != null) {
-                            //         // Navigate to home screen
-                            //         Get.offAllNamed(AppRoutes.homePage);
-                            //       }
-                            //     } else {
-                            //       ScaffoldMessenger.of(context).showSnackBar(
-                            //         SnackBar(
-                            //             content: Text(
-                            //                 'Login failed. Please check your credentials.')),
-                            //       );
-                            //     }
-                            //   },
-                            //   child: Text("Login with Email"),
-                            // ),
                             const SizedBox(height: 16),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 GradientCircleButton(
-                                  // Proceed with login
-                                  onPressed: () async {
-                                    if (_formKey.currentState!.validate()) {
-                                      User? user =
-                                          await _authService.signInWithEmail(
-                                        emailController.text,
-                                        passwordController.text,
-                                      );
-                                      if (user != null) {
-                                        // Navigate to home screen
-                                        Get.offAllNamed(AppRoutes.homePage);
-                                      } else {
-                                        // Check if context is still valid (mounted)
-                                        if (!context.mounted) {
-                                          return; // Early return if widget is disposed
-                                        }
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(
-                                          SnackBar(
-                                              content: Text(
-                                                  'Login failed. Please check your credentials.')),
-                                        );
-                                      }
-                                    }
-                                  },
+                                  onPressed: () => _logInSubmit(context),
                                 ),
 
                                 // ElevatedButton(
@@ -200,8 +195,9 @@ class LoginScreen extends StatelessWidget {
                                         Get.offAllNamed(AppRoutes.homePage);
                                       } else {
                                         // Check if context is still valid (mounted)
-                                        if (!context.mounted)
+                                        if (!context.mounted) {
                                           return; // Early return if widget is disposed
+                                        }
 
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(

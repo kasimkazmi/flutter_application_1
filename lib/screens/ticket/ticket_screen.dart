@@ -6,8 +6,9 @@ import 'package:flutter_application_1/base/utils/ticket_json.dart';
 import 'package:flutter_application_1/base/widgets/app_layoutbuiller_widget.dart';
 import 'package:flutter_application_1/base/widgets/text_column_layout.dart';
 import 'package:flutter_application_1/base/widgets/ticket_view.dart';
-import 'package:flutter_application_1/screens/search/widgets/tap_bar.dart';
 import 'package:flutter_application_1/screens/ticket/widgets/rounded_selector.dart';
+
+import '../flight/widgets/tap_bar.dart';
 
 class TicketScreen extends StatefulWidget {
   const TicketScreen({super.key});
@@ -58,11 +59,11 @@ class _TicketScreenState extends State<TicketScreen> {
               ),
 
               Container(
-                    padding: const EdgeInsets.only(left: 16),
-                    child: TicketView(
-                      ticket: ticketList[ticketIndex],
-                      isColor: true,
-                    )),
+                  padding: const EdgeInsets.only(left: 16),
+                  child: TicketView(
+                    ticket: ticketList[ticketIndex],
+                    isColor: true,
+                  )),
               const SizedBox(
                 height: 2,
               ),
@@ -208,7 +209,6 @@ class _TicketScreenState extends State<TicketScreen> {
             position: false,
           )
         ],
-
       ),
     );
   }

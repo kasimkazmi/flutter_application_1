@@ -29,7 +29,7 @@ class PromotionCards extends StatelessWidget {
           child: Column(
             children: [
               Container(
-                height: 200,
+                height: 180,
                 decoration: BoxDecoration(
                     image: DecorationImage(
                         fit: BoxFit.cover,
