@@ -1,7 +1,9 @@
+import '../res/media.dart';
+
 List<Map<String, dynamic>> hotelList = [
   {
     "id": 1,
-    "image": "hotel_room_view_1.png",
+    "image": AppMedia.hotelRoomView2,
     "placeType": "Open Space",
     "destination": "London",
     "detailsDescription":
@@ -15,7 +17,7 @@ List<Map<String, dynamic>> hotelList = [
   },
   {
     "id": 2,
-    "image": "hotel_room_view_2.png",
+    "image": AppMedia.hotelRoomView1,
     "placeType": "Apartment",
     "destination": "Paris",
     "detailsDescription":
@@ -29,7 +31,7 @@ List<Map<String, dynamic>> hotelList = [
   },
   {
     "id": 3,
-    "image": "hotel_room_view_3.png",
+    "image": AppMedia.hotelRoomView2,
     "placeType": "Luxury Suite",
     "destination": "New York",
     "detailsDescription":
@@ -43,7 +45,7 @@ List<Map<String, dynamic>> hotelList = [
   },
   {
     "id": 4,
-    "image": "hotel_room_view_1.png",
+    "image": AppMedia.hotelRoomView3,
     "placeType": "Penthouse",
     "destination": "Tokyo",
     "detailsDescription":
@@ -57,7 +59,7 @@ List<Map<String, dynamic>> hotelList = [
   },
   {
     "id": 5,
-    "image": "hotel_room_view_2.png",
+    "image": AppMedia.hotelRoomView1,
     "placeType": "Garden View",
     "destination": "Barcelona",
     "detailsDescription":
@@ -71,14 +73,14 @@ List<Map<String, dynamic>> hotelList = [
   },
   {
     "id": 6,
-    "image": "hotel_room_view_3.png",
+    "image": AppMedia.hotelRoomView3,
     "placeType": "Open Space",
     "destination": "Sydney",
     "detailsDescription":
         "A bright and airy open space with easy access to Sydney's attractions. This modern accommodation features large windows, a fully equipped kitchen, and a cozy living area. Located near the iconic Sydney Opera House and Bondi Beach, it's perfect for adventure seekers and beach lovers.",
     "price": 28,
     "images": [
-      "hotel_room_view_1.png",
+      AppMedia.hotelRoom,
       "hotel_room_view_2.png",
       "hotel_room_view_3.png",
     ]

@@ -188,9 +188,13 @@ class _HomeScreenState extends State<HomeScreen> {
         children: hotelList.map((hotelItem) {
           return GestureDetector(
             onTap: () {
-              var index = hotelList.indexOf(hotelItem);
-              Navigator.pushNamed(context, AppRoutes.hotelDetail,
-                  arguments: {"index": index});
+              Navigator.pushNamed(
+                context,
+                AppRoutes.hotelDetail,
+                arguments: {
+                  "id": hotelItem["id"]
+                }, // Pass the correct data (id as int)
+              );
             },
             child: HotelCard(hotel: hotelItem),
           );

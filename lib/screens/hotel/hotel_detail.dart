@@ -3,8 +3,8 @@ import 'package:flutter_application_1/base/res/media.dart';
 import 'package:flutter_application_1/base/res/styles/app_styles.dart';
 import 'package:get/get.dart';
 
-import '../base/utils/hotel_list.dart';
-import '../controller/text_expansion_controller.dart';
+import '../../base/utils/hotel_list.dart';
+import '../../controller/text_expansion_controller.dart';
 
 class HotelDetail extends StatefulWidget {
   const HotelDetail({super.key});
@@ -55,9 +55,7 @@ class _HotelDetailState extends State<HotelDetail> {
                 background: Stack(
               children: [
                 Positioned.fill(
-                  child: Image.asset(
-                      fit: BoxFit.cover,
-                      "${AppMedia.assetsPath}/${hotel["image"]}"),
+                  child: Image.asset(fit: BoxFit.cover, hotel["image"]),
                 ),
                 Positioned(
                   bottom: 20,

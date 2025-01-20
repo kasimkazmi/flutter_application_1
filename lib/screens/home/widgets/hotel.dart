@@ -22,8 +22,7 @@ class HotelCard extends StatelessWidget {
               color: AppStyles.primaryColor,
               borderRadius: BorderRadius.circular(16),
               image: DecorationImage(
-                  fit: BoxFit.cover,
-                  image: AssetImage("assets/images/${hotel["image"]}"))),
+                  fit: BoxFit.cover, image: AssetImage(hotel["image"]))),
         ),
         SizedBox(
           height: 10,

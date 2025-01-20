@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/base/res/styles/app_styles.dart';
-import 'package:flutter_application_1/base/utils/hotel_list.dart';
+import 'package:flutter_application_1/screens/food/widgets/restaurant_card.dart';
 
+import '../../base/res/media.dart';
 import '../../base/utils/app_routes.dart';
+import '../../base/utils/data.dart';
+import '../../base/utils/restaurants_list.dart';
 import '../../base/widgets/app_section_heading.dart';
 
 class FoodScreen extends StatefulWidget {
@@ -37,13 +40,15 @@ class _SearchScreenState extends State<FoodScreen> {
         searchResults = [];
       } else {
         // Perform the search and update the searchResults list
-        searchResults = hotelList
-            .where((hotel) =>
-                hotel["destination"]
+        searchResults = restaurantList
+            .where((restaurant) =>
+                restaurant["name"]
                     .toLowerCase()
                     .contains(query.toLowerCase()) ||
-                hotel["placeType"].toLowerCase().contains(query.toLowerCase()))
-            .map<String>((hotel) => hotel["destination"])
+                restaurant["address"]
+                    .toLowerCase()
+                    .contains(query.toLowerCase()))
+            .map<String>((restaurant) => restaurant["name"])
             .toList();
       }
     });
@@ -126,7 +131,7 @@ class _SearchScreenState extends State<FoodScreen> {
             ),
           ),
 
-          // Conditionally Render Featured Hotels
+          // Conditionally Render Featured Restaurant
           if (searchController.text.isEmpty)
             SliverToBoxAdapter(
               child: Padding(
@@ -134,58 +139,48 @@ class _SearchScreenState extends State<FoodScreen> {
                 child: Column(
                   children: [
                     AppSectionHeading(
-                      leftText: "Featured Hotels",
+                      leftText: "Featured Restaurants",
                       rightText: "View All",
                       func: () {
                         print("View All clicked!");
                       },
                     ),
                     SizedBox(
-                      height: 200,
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: hotelList.length,
-                        itemBuilder: (context, index) {
-                          final hotel = hotelList[index];
-                          return Container(
-                            width: 150,
-                            margin: const EdgeInsets.all(8.0),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(8.0),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.grey.shade300,
-                                  blurRadius: 5.0,
-                                  spreadRadius: 2.0,
-                                ),
-                              ],
-                            ),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  hotel["destination"],
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                                SizedBox(height: 10),
-                                Text(
-                                  hotel["placeType"],
-                                  style: TextStyle(
-                                    color: Colors.grey.shade600,
-                                    fontSize: 12,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          );
-                        },
-                      ),
+                      height: 20,
                     ),
-                    Divider(color: Colors.grey.shade300),
+                    SizedBox(
+                      height: 300,
+                      width: MediaQuery.of(context).size.width,
+                      child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: 4,
+                          itemBuilder: (context, index) {
+                            return Container(
+                              margin: EdgeInsets.only(right: 4.0),
+                              child: RestaurantCard(
+                                onTap: () => {},
+                                imagePath: imagePaths[index],
+                                status: status[index],
+                                bookmark: true,
+                                cardTitle: restaurantNames[index],
+                                rating: ratings[index],
+                                category: category[index],
+                                distance: distance[index],
+                                address: addresses[index],
+                              ),
+                            );
+                          }),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    AppSectionHeading(
+                      leftText: "Category",
+                      rightText: "View All",
+                      func: () {
+                        print("View All clicked!");
+                      },
+                    ),
                   ],
                 ),
               ),
@@ -196,8 +191,8 @@ class _SearchScreenState extends State<FoodScreen> {
             SliverList(
               delegate: SliverChildBuilderDelegate(
                 (BuildContext context, int index) {
-                  final hotel = hotelList.firstWhere(
-                    (h) => h["destination"] == searchResults[index],
+                  final restaurant = restaurantList.firstWhere(
+                    (h) => h["name"] == searchResults[index],
                     orElse: () => {},
                   );
 
@@ -220,11 +215,11 @@ class _SearchScreenState extends State<FoodScreen> {
                         // Background Image
                         ClipRRect(
                           borderRadius: BorderRadius.circular(15),
-                          child: Image.asset(
-                            "assets/images/${hotel["image"] ?? ""}",
-                            fit: BoxFit.cover,
-                            // image: AssetImage("assets/images/${hotel["image"]}"))),
+                          child: Image(
+                            image: AssetImage(restaurant[
+                                "image"]), // Use the image path from the restaurant
 
+                            fit: BoxFit.cover,
                             width: double.infinity,
                             height: double.infinity,
                           ),
@@ -245,7 +240,7 @@ class _SearchScreenState extends State<FoodScreen> {
                           ),
                         ),
 
-                        // Hotel Information
+                        // Restaurant Information
                         Positioned(
                           bottom: 20,
                           left: 16,
@@ -253,31 +248,59 @@ class _SearchScreenState extends State<FoodScreen> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
-                                hotel["destination"] ?? "Unknown",
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
-                                  fontSize: 18,
-                                ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    restaurant["name"] ?? "Unknown",
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                      fontSize: 18,
+                                    ),
+                                  ),
+                                  Text(
+                                    restaurant["rating"] ?? "Unknown",
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                      fontSize: 18,
+                                    ),
+                                  ),
+                                ],
                               ),
                               const SizedBox(height: 5),
-                              Text(
-                                hotel["placeType"] ?? "Unknown",
-                                style: TextStyle(
-                                  color: Colors.white.withOpacity(0.9),
-                                  fontSize: 14,
-                                ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    restaurant["address"] ?? "Unknown",
+                                    style: TextStyle(
+                                      color: Colors.white.withValues(alpha: 12),
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                  Text(
+                                    restaurant["status"] ?? "Unknown",
+                                    style: TextStyle(
+                                      color:
+                                          Colors.white.withValues(alpha: 0.9),
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                ],
                               ),
                               const SizedBox(height: 10),
                               ElevatedButton(
                                 onPressed: () {
-                                  // Navigate to hotel detail page or perform another action
+                                  // Navigate to Restaurant detail page or perform another action
                                   Navigator.pushNamed(
                                     context,
                                     AppRoutes.hotelDetail,
                                     arguments: {
-                                      "id": hotel["id"]
+                                      "id": restaurant["id"]
                                     }, // Pass the correct data (id as int)
                                   );
                                 },
@@ -298,7 +321,7 @@ class _SearchScreenState extends State<FoodScreen> {
               ),
             ),
 
-          // Show "No Results Found" Only When Necessary
+          // Show "No Results Found" Only When Necessary)
           if (searchResults.isEmpty && searchController.text.isNotEmpty)
             SliverToBoxAdapter(
               child: Padding(

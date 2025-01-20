@@ -10,4 +10,5 @@ class AppRoutes {
   static const String flightScreen = "/flight_screen";
   static const String editScreen = "/edit_profile";
   static const String forgotPasswordScreen = "/forgot_screen";
+  static const String blogDetails = "/blog_detail";
 }

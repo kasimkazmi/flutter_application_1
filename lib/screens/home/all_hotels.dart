@@ -46,8 +46,11 @@ class HotelGrid extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         // print("$index+++");
-        Navigator.pushNamed(context, AppRoutes.hotelDetail,
-            arguments: {"index": index});
+        Navigator.pushNamed(
+          context,
+          AppRoutes.hotelDetail,
+          arguments: {"id": hotel["id"]},
+        );
       },
       child: Container(
         margin: EdgeInsets.symmetric(
@@ -66,8 +69,7 @@ class HotelGrid extends StatelessWidget {
                       topLeft: Radius.circular(16),
                       topRight: Radius.circular(16)),
                   image: DecorationImage(
-                      fit: BoxFit.cover,
-                      image: AssetImage("assets/images/${hotel["image"]}"))),
+                      fit: BoxFit.cover, image: AssetImage(hotel["image"]))),
             ),
           ),
           SizedBox(

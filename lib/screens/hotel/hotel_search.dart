@@ -221,7 +221,7 @@ class _SearchScreenState extends State<HotelSearch> {
                         ClipRRect(
                           borderRadius: BorderRadius.circular(15),
                           child: Image.asset(
-                            "assets/images/${hotel["image"] ?? ""}",
+                            hotel["image"] ?? "",
                             fit: BoxFit.cover,
                             // image: AssetImage("assets/images/${hotel["image"]}"))),
 
@@ -265,7 +265,7 @@ class _SearchScreenState extends State<HotelSearch> {
                               Text(
                                 hotel["placeType"] ?? "Unknown",
                                 style: TextStyle(
-                                  color: Colors.white.withOpacity(0.9),
+                                  color: Colors.white.withValues(alpha: 0.9),
                                   fontSize: 14,
                                 ),
                               ),

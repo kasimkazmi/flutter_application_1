@@ -5,10 +5,11 @@ import 'package:flutter_application_1/base/utils/app_routes.dart';
 import 'package:flutter_application_1/screens/Register/register_screen.dart';
 import 'package:flutter_application_1/screens/home/all_hotels.dart';
 import 'package:flutter_application_1/screens/home/all_tickets_screen.dart';
-import 'package:flutter_application_1/screens/hotel_detail.dart';
+import 'package:flutter_application_1/screens/hotel/hotel_detail.dart';
 import 'package:flutter_application_1/screens/login/forgot_screen.dart';
 import 'package:flutter_application_1/screens/login/login_screen.dart';
 import 'package:flutter_application_1/screens/profile/edit_profile.dart';
+import 'package:flutter_application_1/screens/profile/widget/blog_details.dart';
 import 'package:flutter_application_1/screens/splash/splash_screen.dart';
 import 'package:flutter_application_1/screens/ticket/ticket_screen.dart';
 import 'package:get/get.dart';
@@ -54,6 +55,7 @@ class MyApp extends StatelessWidget {
         AppRoutes.editScreen: (context) => EditProfile(),
         AppRoutes.forgotPasswordScreen: (context) => ForgotPasswordScreen(),
         AppRoutes.splashScreen: (context) => SplashScreen(),
+        AppRoutes.blogDetails: (context) => BlogDetails(),
       },
     );
   }
