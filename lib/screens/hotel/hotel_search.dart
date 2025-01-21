@@ -134,7 +134,7 @@ class _SearchScreenState extends State<HotelSearch> {
                 child: Column(
                   children: [
                     AppSectionHeading(
-                      leftText: "Featured Hotels",
+                      leftText: "Popular Destinations",
                       rightText: "View All",
                       func: () {
                         print("View All clicked!");
@@ -186,6 +186,13 @@ class _SearchScreenState extends State<HotelSearch> {
                       ),
                     ),
                     Divider(color: Colors.grey.shade300),
+                    AppSectionHeading(
+                      leftText: "Theme Destinations",
+                      rightText: "View All",
+                      func: () {
+                        print("View All clicked!");
+                      },
+                    ),
                   ],
                 ),
               ),

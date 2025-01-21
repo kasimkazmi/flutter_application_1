@@ -134,7 +134,7 @@ class _SearchScreenState extends State<EventsScreen> {
                 child: Column(
                   children: [
                     AppSectionHeading(
-                      leftText: "Featured Hotels",
+                      leftText: "Featured Categories",
                       rightText: "View All",
                       func: () {
                         print("View All clicked!");
@@ -186,6 +186,14 @@ class _SearchScreenState extends State<EventsScreen> {
                       ),
                     ),
                     Divider(color: Colors.grey.shade300),
+                    AppSectionHeading(
+                      leftText: "Featured Categories",
+                      rightText: "View All",
+                      func: () {
+                        print("View All clicked!");
+                      },
+                    ),
+
                   ],
                 ),
               ),
