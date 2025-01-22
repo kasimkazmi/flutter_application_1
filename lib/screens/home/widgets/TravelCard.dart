@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/base/res/media.dart';
 
 class TravelCard extends StatelessWidget {
   final Map<String, dynamic> data;
@@ -34,9 +35,9 @@ class TravelCard extends StatelessWidget {
                     topRight: Radius.circular(16),
                   ),
                   image: DecorationImage(
-                    image: AssetImage(data["image"] ??
-                        'assets/default_image.png'), // Fallback image
-                    fit: BoxFit.cover,
+                    image: AssetImage(
+                        data["image"] ?? AppMedia.noImages), // Fallback image
+                    fit: BoxFit.contain,
                   ),
                 ),
               ),

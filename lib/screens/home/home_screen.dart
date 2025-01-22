@@ -78,10 +78,12 @@ class _HomeScreenState extends State<HomeScreen> {
             _topNavBarSection(context),
             const SizedBox(height: 30),
             _buildTopTabBar(),
-            const SizedBox(height: 30),
+            const SizedBox(height: 20),
             _buildNearYouSection(context),
             const SizedBox(height: 10),
             _buildHotelScrollView(context),
+            const SizedBox(height: 20),
+            _buildPopularSection(context)
           ],
         );
       }),
@@ -137,6 +139,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return SizedBox(
       height: 450,
       child: Column(
+        spacing: 10,
         children: [
           ClickableTabBar(
             tabNames: tabNames.map((tab) => tab['type']!).toList(),
@@ -163,6 +166,14 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildNearYouSection(BuildContext context) {
     return AppSectionHeading(
       leftText: "Near You",
+      rightText: "See All",
+      func: () => Navigator.pushNamed(context, AppRoutes.allHotelScreen),
+    );
+  }
+
+  Widget _buildPopularSection(BuildContext context) {
+    return AppSectionHeading(
+      leftText: "Top Pick",
       rightText: "See All",
       func: () => Navigator.pushNamed(context, AppRoutes.allHotelScreen),
     );
