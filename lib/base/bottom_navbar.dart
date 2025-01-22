@@ -7,7 +7,6 @@ import 'package:get/get.dart';
 
 import '../controller/bottom_nav_controller.dart';
 import '../screens/home/home_screen.dart';
-import '../screens/profile/profile_screen.dart';
 import '../screens/search/search.dart';
 
 class BottomNavBar extends StatelessWidget {
