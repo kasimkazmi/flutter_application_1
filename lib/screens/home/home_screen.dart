@@ -6,21 +6,21 @@ import 'package:flutter_application_1/base/widgets/clickable_tab_bar.dart';
 import 'package:flutter_application_1/screens/events/events_screen.dart';
 import 'package:flutter_application_1/screens/flight/flight_screen.dart';
 import 'package:flutter_application_1/screens/food/food_screen.dart';
-import 'package:flutter_application_1/screens/home/all_hotels.dart';
 import 'package:flutter_application_1/screens/home/widgets/TravelCard.dart';
 import 'package:flutter_application_1/screens/home/widgets/hotel.dart';
+import 'package:flutter_application_1/screens/home/widgets/resort_card.dart';
 import 'package:flutter_application_1/screens/home/widgets/top_navbar.dart';
-import 'package:flutter_application_1/screens/hotel/hotel_search.dart';
-import 'package:flutter_application_1/screens/search/search.dart';
 import 'package:get/get.dart';
 
 import '../../base/res/styles/app_styles.dart';
 import '../../base/utils/app_routes.dart';
+import '../../base/utils/resort_list.dart';
 import '../../base/utils/values/top_tab_list.dart';
 import '../../base/utils/values/travel_package_list.dart';
 import '../../base/widgets/app_section_heading.dart';
 import '../../controller/auth_controller.dart';
 import '../../controller/user_controller.dart';
+import '../hotel/hotel_search.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -30,20 +30,24 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  // Controllers for authentication and user data
   final AuthController authController = Get.find<AuthController>();
   final UserController userController = Get.find<UserController>();
   final TextEditingController searchController = TextEditingController();
 
+  // Index of the selected tab in the clickable tab bar
   int _selectedTabIndex = 0;
 
   @override
   void initState() {
     super.initState();
+    // Fetch user details if the user is logged in
     if (authController.isLoggedIn.value) {
       userController.fetchUserDetails();
     }
   }
 
+  // Method to update the selected tab index
   void _onTabSelected(int index) {
     setState(() {
       _selectedTabIndex = index;
@@ -54,56 +58,72 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
 
+    // Fetch user details if not already fetched
     if (!userController.isLoading.value &&
         authController.isLoggedIn.value &&
         userController.userData.value == null) {
       userController.fetchUserDetails();
     }
 
+    // Main scaffold of the HomeScreen
     return Scaffold(
       backgroundColor: AppStyles.bgColor,
       body: Obx(() {
+        // Show loading indicator while fetching user details
         if (userController.isLoading.value) {
           return const Center(child: CircularProgressIndicator());
         }
+
+        // Retrieve user data and display username
         final userData = userController.userData.value;
-        final username = userData?['username'] ?? 'No Username';
+        final username = userData?['username'] ?? 'Guest';
 
         return ListView(
           padding: const EdgeInsets.symmetric(horizontal: 20),
           children: [
+            // Greetings section
             SizedBox(height: size.height * 0.068),
             _buildGreetingsSection(username),
             const SizedBox(height: 30),
+
+            // Top navigation bar (Hotel, Flight, Food, Events)
             _topNavBarSection(context),
             const SizedBox(height: 30),
+
+            // Vacation package tab bar
             _buildTopTabBar(),
             const SizedBox(height: 20),
+
+            // "Near You" section header
             _buildNearYouSection(context),
             const SizedBox(height: 10),
             _buildHotelScrollView(context),
-            const SizedBox(height: 20),
-            _buildPopularSection(context)
+            // "Top Picks" section header
+            _buildPopularSection(context),
+            const SizedBox(height: 10),
           ],
         );
       }),
     );
   }
 
-  // Welcome Section
+  // Greetings Section
   Widget _buildGreetingsSection(String username) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
+        // Display username and welcome message
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text("Hi $username!", style: AppStyles.headLineStyle2),
-            Text("WHERE TO!",
-                style: AppStyles.greetingsLabel.copyWith(color: Colors.orange)),
-            const SizedBox(height: 5),
+            Text(
+              "WHERE TO!",
+              style: AppStyles.greetingsLabel.copyWith(color: Colors.orange),
+            ),
           ],
         ),
+        // App logo
         Container(
           width: 50,
           height: 50,
@@ -116,19 +136,20 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  // Top 4 tab Buttons
+  // Top Navigation Bar
   Widget _topNavBarSection(BuildContext context) {
     return TopNavbar(
       tabs: topNavList,
+      // Navigate to respective screens when a tab is selected
       onTabSelected: (int index) {
         if (index == 0) {
-          Get.to(HotelSearch());
+          Get.to(() => HotelSearch());
         } else if (index == 1) {
-          Get.to(FlightScreen());
+          Get.to(() => FlightScreen());
         } else if (index == 2) {
-          Get.to(FoodScreen());
+          Get.to(() => FoodScreen());
         } else if (index == 3) {
-          Get.to(EventsScreen());
+          Get.to(() => EventsScreen());
         }
       },
     );
@@ -137,17 +158,19 @@ class _HomeScreenState extends State<HomeScreen> {
   // Vacation Package Tab Bar
   Widget _buildTopTabBar() {
     return SizedBox(
-      height: 450,
+      height: 450, // Fixed height for the tab bar and its content
       child: Column(
         spacing: 10,
         children: [
+          // ClickableTabBar for selecting vacation types
           ClickableTabBar(
-            tabNames: tabNames.map((tab) => tab['type']!).toList(),
+            tabNames: tabNames.map((tab) => tab['type'] ?? 'Default').toList(),
             selectedTabIndex: _selectedTabIndex,
             onTabSelected: (index) {
               _onTabSelected(index);
             },
           ),
+          // Display TravelCard based on the selected tab
           Expanded(
             child: TravelCard(
               data: _getTravelCardData(_selectedTabIndex),
@@ -158,11 +181,15 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  // Method to get TravelCard data based on selected tab index
+  // Get data for TravelCard based on selected tab
   Map<String, dynamic> _getTravelCardData(int index) {
+    if (travelPackages.isEmpty) {
+      return {"type": "No data available"}; // Fallback in case of empty data
+    }
     return travelPackages[index % travelPackages.length];
   }
 
+  // "Near You" Section Header
   Widget _buildNearYouSection(BuildContext context) {
     return AppSectionHeading(
       leftText: "Near You",
@@ -171,9 +198,10 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  // "Top Picks" Section Header
   Widget _buildPopularSection(BuildContext context) {
     return AppSectionHeading(
-      leftText: "Top Pick",
+      leftText: "Top Picks",
       rightText: "See All",
       func: () => Navigator.pushNamed(context, AppRoutes.allHotelScreen),
     );
@@ -197,6 +225,37 @@ class _HomeScreenState extends State<HomeScreen> {
             child: HotelCard(hotel: hotelItem),
           );
         }).toList(),
+      ),
+    );
+  }
+
+  // Horizontal Scroll View of Hotels
+  Widget _buildHotelScrolslView(BuildContext context) {
+    return SizedBox(
+      height: 400, // Fixed height for the scrollable hotel list
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          children: resorts.map((item) {
+            return GestureDetector(
+              // Navigate to hotel details screen on tap
+              onTap: () {
+                Navigator.pushNamed(
+                  context,
+                  AppRoutes.hotelDetail,
+                  arguments: {
+                    "id": item["id"],
+                  },
+                );
+              },
+              // Render individual ResortCard
+              child: SizedBox(
+                width: 250, // Fixed width for each card
+                child: ResortCard(data: item),
+              ),
+            );
+          }).toList(),
+        ),
       ),
     );
   }
