@@ -74,11 +74,13 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
             SizedBox(height: size.height * 0.068),
             _buildGreetingsSection(username),
-            const SizedBox(height: 25),
+            const SizedBox(height: 30),
             _topNavBarSection(context),
             const SizedBox(height: 30),
             _buildTopTabBar(),
-            const SizedBox(height: 20),
+            const SizedBox(height: 30),
+            _buildNearYouSection(context),
+            const SizedBox(height: 10),
             _buildHotelScrollView(context),
           ],
         );
@@ -158,9 +160,9 @@ class _HomeScreenState extends State<HomeScreen> {
     return travelPackages[index % travelPackages.length];
   }
 
-  Widget _buildHotelsSection(BuildContext context) {
+  Widget _buildNearYouSection(BuildContext context) {
     return AppSectionHeading(
-      leftText: "Recommendation",
+      leftText: "Near You",
       rightText: "See All",
       func: () => Navigator.pushNamed(context, AppRoutes.allHotelScreen),
     );
