@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/base/res/styles/app_styles.dart';
 
 class User {
   final String name;
   final String imageUrl;
+  final bool isActive;
 
-  User({required this.name, required this.imageUrl});
+  User({this.isActive = false, required this.name, required this.imageUrl});
 }
 
 class StoryView extends StatelessWidget {
@@ -70,11 +72,38 @@ class StoryView extends StatelessWidget {
                     width: 65,
                     height: 65,
                     decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(25),
-                      image: DecorationImage(
-                        image: NetworkImage(user.imageUrl),
-                        fit: BoxFit.cover,
+                      borderRadius: BorderRadius.circular(10),
+                      gradient: user.isActive
+                          ? LinearGradient(
+                              colors: [Colors.blue, Colors.purple],
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight)
+                          : null,
+                      // border: user.isActive
+                      //     ? Border.all(color: Colors.grey, width: 3)
+                      //     : null,
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(0.29),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(25),
+                          border: user.isActive
+                              ? Border.all(color: AppStyles.bgColor, width: 4)
+                              : null,
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(20),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              image: DecorationImage(
+                                image: NetworkImage(user.imageUrl),
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
+                        ),
                       ),
                     ),
                   ),
