@@ -1,17 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/base/res/styles/app_styles.dart';
 
+class Story {
+  final String title; // Title of the story
+  final String imageUrl; // Image URL of the story
+  final DateTime timestamp; // When the story was posted
+
+  Story({
+    required this.title,
+    required this.imageUrl,
+    required this.timestamp,
+  });
+}
+
 class User {
   final String name;
-  final String imageUrl;
+  final String profileImageUrl;
   bool isActive;
   bool isViewed;
+  final List<Story> stories; // List of stories for the user
 
   User({
     this.isActive = false,
     this.isViewed = false,
     required this.name,
-    required this.imageUrl,
+    required this.profileImageUrl,
+    required this.stories,
   });
 }
 
@@ -53,14 +67,14 @@ class _StoryViewState extends State<StoryView> {
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(25),
                         image: DecorationImage(
-                          image: NetworkImage(widget.users[0].imageUrl),
+                          image: NetworkImage(widget.users[0].profileImageUrl),
                           fit: BoxFit.cover,
                         ),
                       ),
                       child: Container(
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(25),
-                          color: Colors.black.withOpacity(0.5),
+                          color: Colors.black.withValues(alpha: 0.5),
                         ),
                         child: Icon(
                           Icons.add, // Add icon
@@ -135,7 +149,7 @@ class _StoryViewState extends State<StoryView> {
                               decoration: BoxDecoration(
                                 color: Colors.white,
                                 image: DecorationImage(
-                                  image: NetworkImage(user.imageUrl),
+                                  image: NetworkImage(user.profileImageUrl),
                                   fit: BoxFit.cover,
                                 ),
                               ),
@@ -167,68 +181,123 @@ class _StoryViewState extends State<StoryView> {
   }
 }
 
-class StoryPreviewModal extends StatelessWidget {
+class StoryPreviewModal extends StatefulWidget {
   final User user;
 
   const StoryPreviewModal({super.key, required this.user});
 
   @override
+  _StoryPreviewModalState createState() => _StoryPreviewModalState();
+}
+
+class _StoryPreviewModalState extends State<StoryPreviewModal> {
+  final PageController _pageController = PageController();
+  int _currentPage = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _pageController.addListener(() {
+      setState(() {
+        _currentPage = _pageController.page!.round();
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    // Get the height of the screen
+    double screenHeight = MediaQuery.of(context).size.height;
+
     return Dialog(
       backgroundColor: Colors.black,
       insetPadding: const EdgeInsets.all(16),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
       ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
+      child: Stack(
         children: [
-          // Story image preview
-          ClipRRect(
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
-            child: Image.network(
-              user.imageUrl,
-              height: 300,
-              width: double.infinity,
-              fit: BoxFit.cover,
+          // Scrollable list of story images using PageView
+          SizedBox(
+            height:
+                screenHeight * 0.5, // Set height to 50% of the screen height
+            child: PageView.builder(
+              controller: _pageController,
+              itemCount: widget.user.stories.length,
+              itemBuilder: (context, index) {
+                final story = widget.user.stories[index];
+                return SizedBox(
+                  width: 400, // Set a fixed width for each story
+                  child: Column(
+                    children: [
+                      ClipRRect(
+                        borderRadius: const BorderRadius.vertical(
+                            top: Radius.circular(0)),
+                        child: Image.network(
+                          story.imageUrl,
+                          height: screenHeight *
+                              0.4, // Set height to 40% of the screen height
+                          width: double.infinity,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        story.title,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        "${story.timestamp}", // Display the timestamp
+                        style: const TextStyle(
+                          color: Colors.white70,
+                          fontSize: 12,
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                    ],
+                  ),
+                );
+              },
             ),
           ),
-          const SizedBox(height: 16),
-          // User info and story details
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  user.name,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  "October 11, 2020", // Example date
-                  style: const TextStyle(
-                    color: Colors.white70,
-                    fontSize: 14,
-                  ),
-                ),
-              ],
+          // Close button positioned at the top right corner
+          Positioned(
+            top: 16.0,
+            right: 16.0,
+            child: IconButton(
+              icon: const Icon(Icons.close, color: Colors.white),
+              onPressed: () => Navigator.of(context).pop(),
             ),
           ),
-          const SizedBox(height: 16),
-          // Close button
-          Align(
-            alignment: Alignment.centerRight,
-            child: Padding(
-              padding: const EdgeInsets.only(right: 16.0, bottom: 16.0),
-              child: IconButton(
-                icon: const Icon(Icons.close, color: Colors.white),
-                onPressed: () => Navigator.of(context).pop(),
-              ),
+          // Dot indicator
+          Positioned(
+            bottom: 16.0, // Position it above the bottom of the image
+            left: MediaQuery.of(context).size.width / 2 -
+                24, // Center horizontally
+
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: List.generate(widget.user.stories.length, (index) {
+                return Container(
+                  width: 8.0,
+                  height: 8.0,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: _currentPage == index ? Colors.white : Colors.grey,
+                  ),
+                );
+              }),
             ),
           ),
         ],
