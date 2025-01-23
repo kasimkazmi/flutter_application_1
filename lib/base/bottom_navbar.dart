@@ -1,13 +1,13 @@
 import 'package:fluentui_icons/fluentui_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/base/res/styles/app_styles.dart';
+import 'package:flutter_application_1/screens/feed/feed_screen.dart';
 import 'package:flutter_application_1/screens/profile/profile_screen2.dart';
 import 'package:flutter_application_1/screens/ticket/ticket_screen.dart';
 import 'package:get/get.dart';
 
 import '../controller/bottom_nav_controller.dart';
 import '../screens/home/home_screen.dart';
-import '../screens/search/search.dart';
 
 class BottomNavBar extends StatelessWidget {
   BottomNavBar({super.key});
@@ -17,7 +17,7 @@ class BottomNavBar extends StatelessWidget {
 
   final appScreen = [
     HomeScreen(),
-    SearchScreen(),
+    FeedScreen(),
     TicketScreen(),
     ProfileScreen2(),
   ];
