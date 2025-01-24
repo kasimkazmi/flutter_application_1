@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/base/res/styles/app_styles.dart';
 
 import '../../../base/utils/values/values.dart';
 

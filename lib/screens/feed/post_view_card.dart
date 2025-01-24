@@ -1,12 +1,39 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart'; // Import this package for date formatting
+
+import '../../base/widgets/network_image_handler.dart';
+
+class Post {
+  final String username;
+  final DateTime timeAgo;
+  final String content;
+  final int likes;
+  final int comments;
+  final String imageUrl;
+  final String profileImageUrl;
+
+  Post({
+    required this.imageUrl,
+    required this.username,
+    required this.timeAgo,
+    required this.content,
+    required this.likes,
+    required this.comments,
+    required this.profileImageUrl,
+  });
+}
 
 class PostViewCard extends StatelessWidget {
-  const PostViewCard({super.key});
+  final Post post;
+  const PostViewCard({super.key, required this.post});
 
   @override
   Widget build(BuildContext context) {
+    // Format the DateTime to a readable String
+    String formattedTimeAgo = DateFormat('hh:mm a').format(post.timeAgo);
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.symmetric(horizontal: 25 ,vertical: 16),
+      margin: const EdgeInsets.only(bottom: 15,left: 10, right: 10) ,
       decoration: BoxDecoration(
         color: Colors.grey[900],
         borderRadius: BorderRadius.circular(16),
@@ -19,24 +46,30 @@ class PostViewCard extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  CircleAvatar(
-                    radius: 18,
-                    backgroundColor: Colors.grey[800],
-                    child: Icon(Icons.person, color: Colors.white),
+                  Container(
+                    width: 65,
+                    height: 65,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(25),
+                      image: DecorationImage(
+                        image: NetworkImage(post.profileImageUrl),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
                   ),
                   const SizedBox(width: 8),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [
+                    children: [
                       Text(
-                        "Mark Kyle",
+                        post.username,
                         style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                       Text(
-                        "24 days ago",
+                        formattedTimeAgo,
                         style: TextStyle(
                           color: Colors.white70,
                           fontSize: 12,
@@ -50,41 +83,38 @@ class PostViewCard extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 16),
-          const Text(
-            "I miss my parents too much. I haven't talked to them in 2 years.",
-            style: TextStyle(
+          Text(
+            post.content,
+            style: const TextStyle(
               color: Colors.white,
               fontSize: 14,
             ),
           ),
           const SizedBox(height: 16),
-          Container(
+          NetworkImageWithErrorHandler(
+            imageUrl: post.imageUrl,
             height: 150,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(16),
-              gradient: LinearGradient(
-                colors: [Colors.orange, Colors.pink],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
-            ),
+            width: double.infinity,
+            fit: BoxFit.cover,
           ),
           const SizedBox(height: 16),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Row(
-                children: const [
+                children: [
                   Icon(Icons.favorite, color: Colors.red),
                   SizedBox(width: 8),
-                  Text("10", style: TextStyle(color: Colors.white)),
+                  Text("${post.likes}",
+                      style: const TextStyle(color: Colors.white)),
                 ],
               ),
               Row(
-                children: const [
+                children: [
                   Icon(Icons.comment, color: Colors.white70),
                   SizedBox(width: 8),
-                  Text("12 Comments", style: TextStyle(color: Colors.white)),
+                  Text("${post.comments}",
+                      style: const TextStyle(color: Colors.white)),
                 ],
               ),
             ],

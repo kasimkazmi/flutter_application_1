@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/base/res/media.dart';
 import 'package:flutter_application_1/base/res/styles/app_styles.dart';
 import 'package:flutter_application_1/controller/auth_controller.dart';
 import 'package:flutter_application_1/controller/user_controller.dart';
+import 'package:flutter_application_1/screens/feed/data/post_list.dart';
 import 'package:flutter_application_1/screens/feed/data/user_story_list.dart';
 import 'package:flutter_application_1/screens/feed/post_view_card.dart';
 import 'package:flutter_application_1/screens/feed/widgets/story_widget.dart';
@@ -231,7 +231,14 @@ Widget _buildWritePost(BuildContext context) {
   );
 }
 
-// Post Card Widget
+/// Post Card Widget
 Widget _buildPostCard(BuildContext context) {
-  return PostViewCard();
+  return ListView.builder(
+    physics: const NeverScrollableScrollPhysics(),
+    shrinkWrap: true,
+    itemCount: posts.length,
+    itemBuilder: (context, index) {
+      return PostViewCard(post: posts[index]);
+    },
+  );
 }

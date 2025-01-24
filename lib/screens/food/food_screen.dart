@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/base/res/styles/app_styles.dart';
 import 'package:flutter_application_1/screens/food/widgets/restaurant_card.dart';
 
-import '../../base/res/media.dart';
 import '../../base/utils/app_routes.dart';
 import '../../base/utils/data.dart';
 import '../../base/utils/restaurants_list.dart';
