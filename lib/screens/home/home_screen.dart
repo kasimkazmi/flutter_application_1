@@ -3,9 +3,11 @@ import 'package:flutter_application_1/base/res/media.dart';
 import 'package:flutter_application_1/base/utils/hotel_list.dart';
 import 'package:flutter_application_1/base/utils/top_tab_list.dart';
 import 'package:flutter_application_1/base/widgets/clickable_tab_bar.dart';
-import 'package:flutter_application_1/screens/events/events_screen.dart';
-import 'package:flutter_application_1/screens/flight/flight_screen.dart';
-import 'package:flutter_application_1/screens/food/food_screen.dart';
+import 'package:flutter_application_1/screens/features/events/events_screen.dart';
+import 'package:flutter_application_1/screens/features/flight/flight_screen.dart';
+import 'package:flutter_application_1/screens/features/food/food_screen.dart';
+import 'package:flutter_application_1/screens/features/hotel/hotel_search.dart';
+
 import 'package:flutter_application_1/screens/home/widgets/TravelCard.dart';
 import 'package:flutter_application_1/screens/home/widgets/hotel.dart';
 import 'package:flutter_application_1/screens/home/widgets/resort_card.dart';
@@ -20,7 +22,6 @@ import '../../base/utils/values/travel_package_list.dart';
 import '../../base/widgets/app_section_heading.dart';
 import '../../controller/auth_controller.dart';
 import '../../controller/user_controller.dart';
-import '../hotel/hotel_search.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});

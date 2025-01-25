@@ -29,7 +29,7 @@ class InputText extends StatelessWidget {
               : null, // only add icon if it's not null
           labelText: label,
           labelStyle:
-              TextStyle(color: Colors.grey, fontWeight: FontWeight.w600),
+              TextStyle(color: Colors.grey, fontWeight: FontWeight.w400),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
             borderSide: BorderSide(color: Colors.purple, width: 2),
@@ -37,7 +37,7 @@ class InputText extends StatelessWidget {
           enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),
               borderSide: BorderSide(
-                color: Colors.white,
+                color: Colors.grey,
               )),
           fillColor: Colors.white,
           filled: true,

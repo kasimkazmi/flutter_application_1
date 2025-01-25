@@ -2,17 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/base/res/styles/app_styles.dart';
 import 'package:flutter_application_1/base/utils/hotel_list.dart';
 
-import '../../base/utils/app_routes.dart';
-import '../../base/widgets/app_section_heading.dart';
+import '../../../base/utils/app_routes.dart';
+import '../../../base/widgets/app_section_heading.dart';
 
-class EventsScreen extends StatefulWidget {
-  const EventsScreen({super.key});
+class HotelSearch extends StatefulWidget {
+  const HotelSearch({super.key});
 
   @override
-  State<EventsScreen> createState() => _SearchScreenState();
+  State<HotelSearch> createState() => _SearchScreenState();
 }
 
-class _SearchScreenState extends State<EventsScreen> {
+class _SearchScreenState extends State<HotelSearch> {
   late TextEditingController
       searchController; // Controller for the search field
   List<String> searchResults = []; // List to hold search results
@@ -57,6 +57,8 @@ class _SearchScreenState extends State<EventsScreen> {
     return Scaffold(
       backgroundColor: AppStyles.bgColor,
       body: CustomScrollView(
+        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+
         slivers: [
           // SliverAppBar for Search Bar
           SliverAppBar(
@@ -89,7 +91,7 @@ class _SearchScreenState extends State<EventsScreen> {
                     Padding(
                       padding: const EdgeInsets.all(16.0),
                       child: Text(
-                        "Search Events",
+                        "Search Hotels",
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 24,
@@ -134,7 +136,7 @@ class _SearchScreenState extends State<EventsScreen> {
                 child: Column(
                   children: [
                     AppSectionHeading(
-                      leftText: "Featured Categories",
+                      leftText: "Popular Destinations",
                       rightText: "View All",
                       func: () {
                         print("View All clicked!");
@@ -187,13 +189,12 @@ class _SearchScreenState extends State<EventsScreen> {
                     ),
                     Divider(color: Colors.grey.shade300),
                     AppSectionHeading(
-                      leftText: "Featured Categories",
+                      leftText: "Theme Destinations",
                       rightText: "View All",
                       func: () {
                         print("View All clicked!");
                       },
                     ),
-
                   ],
                 ),
               ),
@@ -229,7 +230,7 @@ class _SearchScreenState extends State<EventsScreen> {
                         ClipRRect(
                           borderRadius: BorderRadius.circular(15),
                           child: Image.asset(
-                            "assets/images/${hotel["image"] ?? ""}",
+                            hotel["image"] ?? "",
                             fit: BoxFit.cover,
                             // image: AssetImage("assets/images/${hotel["image"]}"))),
 
@@ -273,7 +274,7 @@ class _SearchScreenState extends State<EventsScreen> {
                               Text(
                                 hotel["placeType"] ?? "Unknown",
                                 style: TextStyle(
-                                  color: Colors.white.withOpacity(0.9),
+                                  color: Colors.white.withValues(alpha: 0.9),
                                   fontSize: 14,
                                 ),
                               ),

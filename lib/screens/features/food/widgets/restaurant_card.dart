@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/base/res/media.dart';
+import 'package:flutter_application_1/screens/features/food/widgets/card_tags.dart';
 
-import '../../../base/utils/values/values.dart';
-import 'card_tags.dart';
+import '../../../../base/utils/values/values.dart';
 
 class RestaurantCard extends StatelessWidget {
   final String status;

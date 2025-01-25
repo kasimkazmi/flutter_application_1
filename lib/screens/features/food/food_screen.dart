@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/base/res/styles/app_styles.dart';
-import 'package:flutter_application_1/screens/food/widgets/restaurant_card.dart';
+import 'package:flutter_application_1/base/utils/app_routes.dart';
+import 'package:flutter_application_1/base/utils/data.dart';
+import 'package:flutter_application_1/base/utils/restaurants_list.dart';
+import 'package:flutter_application_1/base/widgets/app_section_heading.dart';
+import 'package:flutter_application_1/screens/features/food/widgets/restaurant_card.dart';
 
-import '../../base/utils/app_routes.dart';
-import '../../base/utils/data.dart';
-import '../../base/utils/restaurants_list.dart';
-import '../../base/widgets/app_section_heading.dart';
 
 class FoodScreen extends StatefulWidget {
   const FoodScreen({super.key});
@@ -61,6 +61,7 @@ class _SearchScreenState extends State<FoodScreen> {
     return Scaffold(
       backgroundColor: AppStyles.bgColor,
       body: CustomScrollView(
+        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
         slivers: [
           // SliverAppBar for Search Bar
           SliverAppBar(

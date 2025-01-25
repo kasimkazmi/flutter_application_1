@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/base/bottom_navbar.dart';
@@ -5,23 +7,25 @@ import 'package:flutter_application_1/base/utils/app_routes.dart';
 import 'package:flutter_application_1/screens/Register/register_screen.dart';
 import 'package:flutter_application_1/screens/home/all_hotels.dart';
 import 'package:flutter_application_1/screens/home/all_tickets_screen.dart';
-import 'package:flutter_application_1/screens/hotel/hotel_detail.dart';
+import 'package:flutter_application_1/screens/features/hotel/hotel_detail.dart';
 import 'package:flutter_application_1/screens/login/forgot_screen.dart';
 import 'package:flutter_application_1/screens/login/login_screen.dart';
 import 'package:flutter_application_1/screens/profile/edit_profile.dart';
 import 'package:flutter_application_1/screens/profile/widget/blog_details.dart';
 import 'package:flutter_application_1/screens/splash/splash_screen.dart';
 import 'package:flutter_application_1/screens/ticket/ticket_screen.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 
 import 'controller/auth_controller.dart';
 import 'controller/user_controller.dart';
 
 void main() async {
+
+
   // Initialize Firebase
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-
   // Set custom error handling widget
   ErrorWidget.builder = (FlutterErrorDetails details) {
     return Material(
@@ -57,6 +61,18 @@ void main() async {
   // Initialize controllers lazily
   Get.lazyPut<AuthController>(() => AuthController());
   Get.lazyPut<UserController>(() => UserController());
+  try {
+    // Check if the .env file exists at the root directory
+    final envFile = File('.env');
+    if (await envFile.exists()) {
+      print(".env file found, loading...");
+      await dotenv.load(); // Ensure that the .env file is loaded first
+    } else {
+      print("Error: .env file not found.");
+    }
+  } catch (e) {
+    print("Error loading .env file: $e");
+  }
 
   runApp(const MyApp());
 }

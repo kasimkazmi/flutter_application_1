@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/base/res/media.dart';
+import 'package:flutter_application_1/base/res/styles/app_styles.dart';
 
-import '../../../base/res/media.dart';
-import '../../../base/res/styles/app_styles.dart';
 
 class PromotionCards extends StatelessWidget {
   const PromotionCards({super.key});

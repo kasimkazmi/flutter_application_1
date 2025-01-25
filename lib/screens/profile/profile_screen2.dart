@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/base/res/styles/app_styles.dart';
+import 'package:flutter_application_1/base/widgets/logout_button.dart';
 import 'package:flutter_application_1/screens/profile/widget/Profile.dart';
 import 'package:flutter_application_1/screens/profile/widget/blog_content.dart';
 import 'package:flutter_application_1/screens/profile/widget/destinations_content.dart';
@@ -43,6 +44,7 @@ class _ProfileScreen2State extends State<ProfileScreen2> {
             ),
 
             const SizedBox(height: 20),
+            LogoutButton(),
 
             // Tab Content Section
             Expanded(

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../base/utils/values/values.dart';
+import '../../../../base/utils/values/values.dart';
 
 class CardTags extends StatelessWidget {
   final String title;
