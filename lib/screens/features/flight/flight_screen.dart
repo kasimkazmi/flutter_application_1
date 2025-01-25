@@ -3,9 +3,10 @@ import 'package:flutter_application_1/base/res/styles/app_styles.dart';
 import 'package:flutter_application_1/base/utils/app_routes.dart';
 import 'package:flutter_application_1/base/widgets/app_button.dart';
 import 'package:flutter_application_1/base/widgets/app_section_heading.dart';
-import 'package:flutter_application_1/base/widgets/custom_dropdown.dart';
+import 'package:flutter_application_1/screens/features/flight/widgets/custom_dropdown.dart';
 import 'package:flutter_application_1/base/widgets/input_text.dart';
 import 'package:flutter_application_1/controller/flight_api_controller.dart';
+import 'package:flutter_application_1/screens/features/flight/widgets/increment_counter.dart';
 import 'package:flutter_application_1/screens/features/flight/widgets/promotion_cards.dart';
 import 'package:flutter_application_1/screens/features/flight/models/airport_model.dart';
 import 'package:get/get.dart';
@@ -109,7 +110,8 @@ class _FlightScreenState extends State<FlightScreen> {
   Widget _buildAppBar() {
     return SliverAppBar(
       expandedHeight: 200.0,
-      iconTheme: IconThemeData(color: AppStyles.ticketBGColor), // Change the back icon color here
+      iconTheme: IconThemeData(
+          color: AppStyles.ticketBGColor), // Change the back icon color here
 
       floating: false,
       pinned: true,
@@ -194,30 +196,16 @@ class _FlightScreenState extends State<FlightScreen> {
                 const SizedBox(
                     width:
                         15), // Space between date field and passenger controls
-                Row(
-                  children: [
-                    IconButton(
-                      icon: Icon(Icons.remove_circle_outline),
-                      onPressed: () {
-                        setState(() {
-                          if (_numberOfPassengers > 1) _numberOfPassengers--;
-                        });
-                      },
-                    ),
-                    Text(
-                      'Passengers: $_numberOfPassengers',
-                      style: AppStyles.headLineStyle2.copyWith(fontSize: 18),
-                    ),
-                    IconButton(
-                      icon: Icon(Icons.add_circle_outline),
-                      onPressed: () {
-                        setState(() {
-                          _numberOfPassengers++;
-                        });
-                      },
-                    ),
-                  ],
-                ),
+                IncrementCounter(
+                  numberOfPassengers: 2,
+                  onChanged: (newCount) {
+                    // Handle the change in passenger count
+                  },
+                  leftIcon: Icons.remove_circle_outline,
+                  rightIcon: Icons.add_circle_outline,
+                  middleIcon: Icons.person,
+                  iconSize: 30,
+                )
               ],
             ),
           ),
@@ -252,11 +240,11 @@ class _FlightScreenState extends State<FlightScreen> {
           const SizedBox(height: 20),
 
           // Upcoming Flights Section
-          // AppSectionHeading(
-          //   leftText: "Upcoming Flights",
-          //   rightText: "View all",
-          //   func: () => Navigator.pushNamed(context, AppRoutes.allTickets),
-          // ),
+          AppSectionHeading(
+            leftText: "Upcoming Flights",
+            rightText: "View all",
+            func: () => Navigator.pushNamed(context, AppRoutes.allTickets),
+          ),
           const SizedBox(height: 15),
 
           // Promotion Cards
