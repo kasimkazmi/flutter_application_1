@@ -18,10 +18,43 @@ import 'controller/auth_controller.dart';
 import 'controller/user_controller.dart';
 
 void main() async {
+  // Initialize Firebase
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
 
-  // Initialize AuthController and UserController lazily
+  // Set custom error handling widget
+  ErrorWidget.builder = (FlutterErrorDetails details) {
+    return Material(
+      child: Center(
+        child: Container(
+          color: Colors.grey[900],
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                "Something went wrong!",
+                style: TextStyle(
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+              SizedBox(height: 20),
+              Text(
+                details.exception.toString(),
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.white60,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  };
+
+  // Initialize controllers lazily
   Get.lazyPut<AuthController>(() => AuthController());
   Get.lazyPut<UserController>(() => UserController());
 

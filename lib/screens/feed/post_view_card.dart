@@ -32,8 +32,8 @@ class PostViewCard extends StatelessWidget {
     // Format the DateTime to a readable String
     String formattedTimeAgo = DateFormat('hh:mm a').format(post.timeAgo);
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 25 ,vertical: 16),
-      margin: const EdgeInsets.only(bottom: 15,left: 10, right: 10) ,
+      padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 16),
+      margin: const EdgeInsets.only(bottom: 15, left: 10, right: 10),
       decoration: BoxDecoration(
         color: Colors.grey[900],
         borderRadius: BorderRadius.circular(16),

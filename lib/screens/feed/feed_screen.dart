@@ -5,6 +5,7 @@ import 'package:flutter_application_1/controller/user_controller.dart';
 import 'package:flutter_application_1/screens/feed/data/post_list.dart';
 import 'package:flutter_application_1/screens/feed/data/user_story_list.dart';
 import 'package:flutter_application_1/screens/feed/post_view_card.dart';
+import 'package:flutter_application_1/screens/feed/widgets/custom_float_action_button.dart';
 import 'package:flutter_application_1/screens/feed/widgets/story_widget.dart';
 import 'package:flutter_application_1/screens/profile/widget/three_tab_bar.dart';
 import 'package:get/get.dart';
@@ -20,18 +21,69 @@ class FeedScreen extends StatefulWidget {
 final AuthController authController = Get.find<AuthController>();
 final UserController userController = Get.find<UserController>();
 final TextEditingController searchController = TextEditingController();
+late AnimationController _animationController;
+late Animation<double> _addAnimation;
 
-class _FeedScreenState extends State<FeedScreen> {
+class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
+
     // Fetch user details if the user is logged in
     if (authController.isLoggedIn.value) {
       userController.fetchUserDetails();
     }
+
+    // Initialize the AnimationController
+    _animationController = AnimationController(
+      vsync: this, // `this` refers to TickerProviderStateMixin
+      duration: const Duration(milliseconds: 200),
+    );
+
+    // Define the animation curve
+    _addAnimation = CurvedAnimation(
+      parent: _animationController,
+      curve: Curves.linear,
+    );
+    // Start the animation (you can change this based on your interaction)
+    _animationController.forward();
+  }
+
+  @override
+  void dispose() {
+    // Dispose of the animation controller when done
+    _animationController.dispose();
+    super.dispose();
   }
 
   int selectedTabIndex = 0; // Default to Blog tab
+// Custom action to show an alert box
+  void _showAlert(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Create New post"),
+          content: TextFormField(
+            decoration: InputDecoration(hintText: "Enter you Post Content"),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text("Cancel"),
+            ),
+            TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text("Post"))
+          ],
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,6 +91,16 @@ class _FeedScreenState extends State<FeedScreen> {
 
     return Scaffold(
       backgroundColor: AppStyles.bgColor,
+      // Use the Custom Floating Action Button
+      floatingActionButton: CustomFloatingActionButton(
+        onPressed: () => _showAlert(context), // Pass context to showAlert
+
+        animationController:
+            _animationController, // Pass the custom action here
+        child: Icon(Icons.add),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      extendBody: true,
       body: Obx(() {
         // Show loading indicator while fetching user details
         if (userController.isLoading.value) {
