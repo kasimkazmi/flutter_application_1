@@ -58,28 +58,15 @@ class _SearchScreenState extends State<HotelSearch> {
       backgroundColor: AppStyles.bgColor,
       body: CustomScrollView(
         keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-
         slivers: [
           // SliverAppBar for Search Bar
           SliverAppBar(
+            iconTheme: IconThemeData(
+                color:
+                    AppStyles.ticketBGColor), // Change the back icon color here
+
             floating: false,
             pinned: true,
-            leading: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: GestureDetector(
-                onTap: () {
-                  Navigator.pop(context);
-                },
-                child: Container(
-                  decoration: BoxDecoration(
-                      shape: BoxShape.circle, color: AppStyles.primaryColor),
-                  child: const Icon(
-                    Icons.arrow_back,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-            ),
             expandedHeight: 300.0,
             flexibleSpace: FlexibleSpaceBar(
               titlePadding: EdgeInsets.only(bottom: size * 0.055),

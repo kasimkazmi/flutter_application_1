@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/base/bottom_navbar.dart';
 import 'package:flutter_application_1/base/utils/app_routes.dart';
 import 'package:flutter_application_1/screens/Register/register_screen.dart';
+import 'package:flutter_application_1/screens/features/flight/select_flight.dart';
 import 'package:flutter_application_1/screens/home/all_hotels.dart';
 import 'package:flutter_application_1/screens/home/all_tickets_screen.dart';
 import 'package:flutter_application_1/screens/features/hotel/hotel_detail.dart';
@@ -16,13 +17,12 @@ import 'package:flutter_application_1/screens/splash/splash_screen.dart';
 import 'package:flutter_application_1/screens/ticket/ticket_screen.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
+import 'package:path_provider/path_provider.dart';
 
 import 'controller/auth_controller.dart';
 import 'controller/user_controller.dart';
 
 void main() async {
-
-
   // Initialize Firebase
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
@@ -61,19 +61,21 @@ void main() async {
   // Initialize controllers lazily
   Get.lazyPut<AuthController>(() => AuthController());
   Get.lazyPut<UserController>(() => UserController());
-  try {
-    // Check if the .env file exists at the root directory
-    final envFile = File('.env');
-    if (await envFile.exists()) {
-      print(".env file found, loading...");
-      await dotenv.load(); // Ensure that the .env file is loaded first
-    } else {
-      print("Error: .env file not found.");
-    }
-  } catch (e) {
-    print("Error loading .env file: $e");
-  }
+  // try {
+  //   // Get the app's directory for bundled assets
+  //   final directory = await getApplicationDocumentsDirectory();
+  //   final envFilePath = '${directory.path}/.env';
+  //
+  //   print("Looking for .env file at: $envFilePath");
+  //
+  //   // Load the .env file from assets
+  //   await dotenv.load(fileName: envFilePath);
+  //   print("Loaded .env file successfully!");
+  // } catch (e) {
+  //   print("Error loading .env file: $e");
+  // }
 
+  await dotenv.load(fileName: ".env");
   runApp(const MyApp());
 }
 
@@ -88,7 +90,7 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       home: Obx(() {
-        // Check if the user is logged in and navigate accordingly
+        // Check if the user is logged  in and navigate accordingly
         return authController.isLoggedIn.value ? BottomNavBar() : LoginScreen();
       }),
 
@@ -105,6 +107,7 @@ class MyApp extends StatelessWidget {
         AppRoutes.forgotPasswordScreen: (context) => ForgotPasswordScreen(),
         AppRoutes.splashScreen: (context) => SplashScreen(),
         AppRoutes.blogDetails: (context) => BlogDetails(),
+        AppRoutes.selectFlight: (context) => SelectFlight(),
       },
     );
   }

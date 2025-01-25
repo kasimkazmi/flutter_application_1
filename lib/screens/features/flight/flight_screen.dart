@@ -1,90 +1,14 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/base/res/styles/app_styles.dart';
 import 'package:flutter_application_1/base/utils/app_routes.dart';
 import 'package:flutter_application_1/base/widgets/app_button.dart';
 import 'package:flutter_application_1/base/widgets/app_section_heading.dart';
-import 'package:flutter_application_1/screens/features/flight/models/airport_model.dart';
+import 'package:flutter_application_1/base/widgets/custom_dropdown.dart';
+import 'package:flutter_application_1/base/widgets/input_text.dart';
+import 'package:flutter_application_1/controller/flight_api_controller.dart';
 import 'package:flutter_application_1/screens/features/flight/widgets/promotion_cards.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:http/http.dart' as http;
-
-Future<String> fetchAuthToken() async {
-  final String apiKey = dotenv.env['API_KEY'] ?? 'Default API Key';
-  final String clientId = dotenv.env['CLIENT_ID'] ?? 'Default Client ID';
-  final String clientSecret =
-      dotenv.env['CLIENT_SECRET'] ?? 'Default Client Secret';
-  final String baseUrl = dotenv.env['BASE_URL'] ?? '';
-
-  final response = await http.post(
-    Uri.parse('$baseUrl/v1/security/oauth2/token'),
-    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-    body: {
-      'client_id': clientId,
-      'client_secret': clientSecret,
-      'grant_type': 'client_credentials',
-    },
-  );
-  // Debugging API Response
-  // print('Response Status: ${response.statusCode}');
-  // print('Response Headers: ${response.headers}');
-  if (response.statusCode == 200) {
-    final Map<String, dynamic> data = json.decode(response.body);
-    final token = data['access_token']; // Check for null
-    if (token == null) {
-      throw Exception('Auth token is null');
-    }
-    print('Fetched Token: $token'); // Debugging
-    return token;
-  } else {
-    print('Failed to fetch auth token: ${response.body}');
-    throw Exception('Failed to fetch auth token');
-  }
-}
-
-// Function to fetch airports
-Future<List<Airport>> fetchAirports(String query) async {
-  final String token = await fetchAuthToken(); // Fetch token dynamically
-  print('Using Token: $token'); // Debugging token
-  // Load values from the .env file
-
-  final String baseUrl =
-      dotenv.env['BASE_URL'] ?? 'https://test.api.amadeus.com';
-
-  // Ensure the token is not empty
-  if (token.isEmpty) {
-    throw Exception('API key is missing');
-  }
-
-  // Make the API request using the values from the .env file
-  final response = await http.get(
-    Uri.parse(
-        '$baseUrl/v1/reference-data/locations?subType=AIRPORT&keyword=$query'),
-    headers: {
-      'Authorization': 'Bearer $token', // Bearer token from .env
-    },
-  );
-  print('Response Status: ${response.statusCode}');
-  print('Response Body: ${response.body}'); // Log full response
-
-  if (response.statusCode == 200) {
-    final Map<String, dynamic> jsonResponse = json.decode(response.body);
-
-    // Ensure 'data' key exists and is a list
-    if (jsonResponse['data'] != null && jsonResponse['data'] is List) {
-      return (jsonResponse['data'] as List)
-          .map((airport) => Airport.fromJson(airport))
-          .toList();
-    } else {
-      print('Error: "data" key is missing or not a list');
-      throw Exception('No valid data found in response');
-    }
-  } else {
-    final errorDetails = json.decode(response.body);
-    final message = errorDetails['message'] ?? 'Unknown error';
-    throw Exception('Error ${response.statusCode}: $message');
-  }
-}
+import 'package:flutter_application_1/screens/features/flight/models/airport_model.dart';
+import 'package:get/get.dart';
 
 class FlightScreen extends StatefulWidget {
   const FlightScreen({super.key});
@@ -94,58 +18,76 @@ class FlightScreen extends StatefulWidget {
 }
 
 class _FlightScreenState extends State<FlightScreen> {
-  // Controllers for text inputs
   final TextEditingController arrivalController = TextEditingController();
   final TextEditingController departureController = TextEditingController();
-  List<Airport> _suggestions = [];
+  final TextEditingController travelDateController = TextEditingController();
 
-  void _updateSuggestions(String query) async {
+  List<Airport> _departureSuggestions = [];
+  List<Airport> _arrivalSuggestions = [];
+  Airport? _selectedDepartureAirport;
+  Airport? _selectedArrivalAirport;
+  String _selectedClassType = 'Economy'; // Default Class Type
+  int _numberOfPassengers = 1; // Default number of passengers
+  final FlightApiController _apiController = FlightApiController();
+
+  // Updates airport suggestions based on query
+  Future<void> _updateSuggestions(
+      String query, TextEditingController controller) async {
     if (query.isEmpty) {
       setState(() {
-        _suggestions = [];
+        if (controller == departureController) {
+          _departureSuggestions = [];
+        } else if (controller == arrivalController) {
+          _arrivalSuggestions = [];
+        }
       });
       return;
     }
 
     try {
-      List<Airport> airports = await fetchAirports(query);
+      final airports =
+          await _apiController.fetchAirports(query); // Use the controller
       setState(() {
-        _suggestions = airports;
+        if (controller == departureController) {
+          _departureSuggestions = airports;
+        } else if (controller == arrivalController) {
+          _arrivalSuggestions = airports;
+        }
       });
 
       if (airports.isNotEmpty) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              'Found ${airports.length} airports',
-              style: TextStyle(color: Colors.white),
-            ),
-            backgroundColor: Colors.green,
-          ),
-        );
+        _showSnackbar('${airports.length} airports found', Colors.green);
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              'No airports found for your query',
-              style: TextStyle(color: Colors.white),
-            ),
-            backgroundColor: Colors.orange,
-          ),
-        );
+        _showSnackbar('No airports found for your query', Colors.orange);
       }
     } catch (error) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            'Error fetching airports: $error',
-            style: TextStyle(color: Colors.white),
-          ),
-          backgroundColor: Colors.red,
-        ),
-      );
-      print('Print = Error fetching airports: $error');
+      _showSnackbar('Error: $error', Colors.red);
     }
+  }
+
+  // Displays a snackbar with a message
+  void _showSnackbar(String message, Color color) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+          content: Text(message, style: const TextStyle(color: Colors.white)),
+          backgroundColor: color),
+    );
+  }
+
+  // Find Tickets button handler
+  void _onFindTickets() {
+    // Navigate to Restaurant detail page or perform another action
+    Navigator.pushNamed(
+      context,
+      AppRoutes.selectFlight,
+      // Pass the correct data (id as int)
+    );
+    setState(() {
+      _selectedDepartureAirport =
+          _departureSuggestions.isNotEmpty ? _departureSuggestions.first : null;
+      _selectedArrivalAirport =
+          _arrivalSuggestions.isNotEmpty ? _arrivalSuggestions.first : null;
+    });
   }
 
   @override
@@ -155,122 +97,237 @@ class _FlightScreenState extends State<FlightScreen> {
         child: CustomScrollView(
           keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
           slivers: [
-            // SliverAppBar for the search bar and header text
-            SliverAppBar(
-              expandedHeight: 200.0,
-              floating: false,
-              pinned: true,
-              backgroundColor: AppStyles.bgColor,
-              flexibleSpace: FlexibleSpaceBar(
-                title: Text(
-                  "What are \n you looking for ?",
-                  style: AppStyles.headLineStyle2
-                      .copyWith(fontSize: 29, color: AppStyles.bigDotColor),
-                ),
-                background: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 10),
-                  color: AppStyles.profileStatusTextColor,
-                ),
-              ),
-            ),
-
-            // SliverList for the rest of the content
-            SliverPadding(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-              sliver: SliverList(
-                delegate: SliverChildListDelegate(
-                  [
-                    // Departure Input Field with Autocomplete
-                    TextField(
-                      controller: departureController,
-                      onChanged: _updateSuggestions,
-                      decoration: InputDecoration(
-                        labelText: 'Departure',
-                        prefixIcon: Icon(Icons.flight_takeoff_rounded,
-                            color: AppStyles.ticketTopColor),
-                      ),
-                    ),
-                    // Suggestions for Departure
-                    if (_suggestions.isNotEmpty)
-                      SizedBox(
-                        height: 200, // Set a fixed height for the suggestions
-                        child: ListView.builder(
-                          itemCount: _suggestions.length,
-                          itemBuilder: (context, index) {
-                            return ListTile(
-                              title: Text(_suggestions[index].name),
-                              onTap: () {
-                                departureController.text = _suggestions[index]
-                                    .code; // Set selected airport code
-                                setState(() {
-                                  _suggestions = []; // Clear suggestions
-                                });
-                              },
-                            );
-                          },
-                        ),
-                      ),
-                    const SizedBox(height: 15),
-
-                    // Arrival Input Field with Autocomplete
-                    TextField(
-                      controller: arrivalController,
-                      onChanged: _updateSuggestions,
-                      decoration: InputDecoration(
-                        labelText: 'Arrival',
-                        prefixIcon: Icon(Icons.flight_land_rounded,
-                            color: AppStyles.ticketBottomColor),
-                      ),
-                    ),
-                    // Suggestions for Arrival
-                    if (_suggestions.isNotEmpty)
-                      SizedBox(
-                        height: 200, // Set a fixed height for the suggestions
-                        child: ListView.builder(
-                          itemCount: _suggestions.length,
-                          itemBuilder: (context, index) {
-                            return ListTile(
-                              title: Text(_suggestions[index].name),
-                              onTap: () {
-                                arrivalController.text = _suggestions[index]
-                                    .code; // Set selected airport code
-                                setState(() {
-                                  _suggestions = []; // Clear suggestions
-                                });
-                              },
-                            );
-                          },
-                        ),
-                      ),
-                    const SizedBox(height: 30),
-
-                    // Button to find tickets
-                    AppButton(
-                      label: "Find Tickets",
-                      onPressed: () {
-                        // Implement functionality to search for tickets
-                      },
-                    ),
-                    const SizedBox(height: 20),
-
-                    // Section Heading with a navigation function
-                    AppSectionHeading(
-                      leftText: "Upcoming Flights",
-                      rightText: "View all",
-                      func: () =>
-                          Navigator.pushNamed(context, AppRoutes.allTickets),
-                    ),
-                    SizedBox(height: 15),
-
-                    // PromotionCards Widget (displays promotional content)
-                    const PromotionCards(),
-                  ],
-                ),
-              ),
-            ),
+            _buildAppBar(),
+            _buildContent(),
           ],
         ),
       ),
+    );
+  }
+
+  // Builds the app bar
+  Widget _buildAppBar() {
+    return SliverAppBar(
+      expandedHeight: 200.0,
+      iconTheme: IconThemeData(color: AppStyles.ticketBGColor), // Change the back icon color here
+
+      floating: false,
+      pinned: true,
+      backgroundColor: AppStyles.primaryColor,
+      flexibleSpace: FlexibleSpaceBar(
+        title: Text(
+          "Search for flight",
+          style: AppStyles.headLineStyle2
+              .copyWith(fontSize: 29, color: AppStyles.bigDotColor),
+        ),
+        background: Container(
+          color: AppStyles.profileStatusTextColor,
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+        ),
+      ),
+    );
+  }
+
+  // Builds the main content
+  Widget _buildContent() {
+    return SliverPadding(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+      sliver: SliverList(
+        delegate: SliverChildListDelegate([
+          // Departure Input Field
+          InputText(
+            label: 'From',
+            controller: departureController,
+            iconColor: AppStyles.ticketTopColor,
+            prefixIcon: Icons.flight_takeoff_rounded,
+            onTap: () {
+              // Handle tap for suggestions
+              _updateSuggestions(departureController.text, departureController);
+            },
+          ),
+          if (_departureSuggestions.isNotEmpty)
+            _buildSuggestionsList(departureController),
+          const SizedBox(height: 15),
+
+          // Arrival Input Field
+          InputText(
+            label: 'To',
+            controller: arrivalController,
+            prefixIcon: Icons.flight_land_rounded,
+            iconColor: AppStyles.ticketBottomColor,
+            onTap: () {
+              // Handle tap for suggestions
+              _updateSuggestions(arrivalController.text, arrivalController);
+            },
+          ),
+          if (_arrivalSuggestions.isNotEmpty)
+            _buildSuggestionsList(arrivalController),
+          const SizedBox(height: 15),
+
+          SizedBox(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                // Date Input Field
+                Expanded(
+                  child: InputText(
+                    label: 'Travel Date',
+                    controller: travelDateController,
+                    iconColor: AppStyles.ticketTopColor,
+                    prefixIcon: Icons.calendar_today,
+                    onTap: () async {
+                      final DateTime? pickedDate = await showDatePicker(
+                        context: context,
+                        initialDate: DateTime.now(),
+                        firstDate: DateTime(2000),
+                        lastDate: DateTime(2101),
+                      );
+                      if (pickedDate != null) {
+                        setState(() {
+                          travelDateController.text =
+                              '${pickedDate.year}-${pickedDate.month}-${pickedDate.day}';
+                        });
+                      }
+                    },
+                  ),
+                ),
+                const SizedBox(
+                    width:
+                        15), // Space between date field and passenger controls
+                Row(
+                  children: [
+                    IconButton(
+                      icon: Icon(Icons.remove_circle_outline),
+                      onPressed: () {
+                        setState(() {
+                          if (_numberOfPassengers > 1) _numberOfPassengers--;
+                        });
+                      },
+                    ),
+                    Text(
+                      'Passengers: $_numberOfPassengers',
+                      style: AppStyles.headLineStyle2.copyWith(fontSize: 18),
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.add_circle_outline),
+                      onPressed: () {
+                        setState(() {
+                          _numberOfPassengers++;
+                        });
+                      },
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+
+          const SizedBox(height: 30),
+
+          CustomDropdown(
+            label: 'Class',
+            selectedValue: _selectedClassType,
+            items: ['Economy', 'Business', 'First Class'],
+            prefixIcon: Icons.airline_seat_recline_extra,
+            iconColor: AppStyles.ticketTopColor,
+            onChanged: (String? newValue) {
+              setState(() {
+                _selectedClassType = newValue!;
+              });
+            },
+          ),
+          const SizedBox(height: 30),
+          // Find Tickets Button
+          AppButton(
+            label: "Find Tickets",
+            onPressed: _onFindTickets, // Handle button press
+          ),
+          const SizedBox(height: 20),
+
+          // Display selected airports if available
+          if (_selectedDepartureAirport != null &&
+              _selectedArrivalAirport != null)
+            _buildTravelInfo(),
+
+          const SizedBox(height: 20),
+
+          // Upcoming Flights Section
+          // AppSectionHeading(
+          //   leftText: "Upcoming Flights",
+          //   rightText: "View all",
+          //   func: () => Navigator.pushNamed(context, AppRoutes.allTickets),
+          // ),
+          const SizedBox(height: 15),
+
+          // Promotion Cards
+          // const PromotionCards(),
+        ]),
+      ),
+    );
+  }
+
+  // Builds a list of airport suggestions
+  Widget _buildSuggestionsList(TextEditingController controller) {
+    final suggestions = controller == departureController
+        ? _departureSuggestions
+        : _arrivalSuggestions;
+
+    return SizedBox(
+      height: 200,
+      child: ListView.builder(
+        itemCount: suggestions.length,
+        itemBuilder: (context, index) {
+          final airport = suggestions[index];
+          return ListTile(
+            title: Text(airport.name),
+            onTap: () {
+              controller.text = airport.code; // Update the correct field
+              setState(() {
+                if (controller == departureController) {
+                  _departureSuggestions = [];
+                  _selectedDepartureAirport = airport;
+                } else if (controller == arrivalController) {
+                  _arrivalSuggestions = [];
+                  _selectedArrivalAirport = airport;
+                }
+              });
+            },
+          );
+        },
+      ),
+    );
+  }
+
+  // Displays the selected departure and arrival airports
+  Widget _buildTravelInfo() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Travel From: ${_selectedDepartureAirport!.name} (${_selectedDepartureAirport!.code})',
+          style: AppStyles.headLineStyle2.copyWith(fontSize: 18),
+        ),
+        const SizedBox(height: 10),
+        Text(
+          'Travel To: ${_selectedArrivalAirport!.name} (${_selectedArrivalAirport!.code})',
+          style: AppStyles.headLineStyle2.copyWith(fontSize: 18),
+        ),
+        const SizedBox(height: 10),
+        Text(
+          'Travel Date: ${travelDateController.text}',
+          style: AppStyles.headLineStyle2.copyWith(fontSize: 18),
+        ),
+        const SizedBox(height: 10),
+        Text(
+          'Passengers: $_numberOfPassengers',
+          style: AppStyles.headLineStyle2.copyWith(fontSize: 18),
+        ),
+        const SizedBox(height: 10),
+        Text(
+          'Class Type: $_selectedClassType',
+          style: AppStyles.headLineStyle2.copyWith(fontSize: 18),
+        ),
+      ],
     );
   }
 }

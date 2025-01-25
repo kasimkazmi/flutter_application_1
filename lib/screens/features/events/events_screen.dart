@@ -63,22 +63,7 @@ class _SearchScreenState extends State<EventsScreen> {
           SliverAppBar(
             floating: false,
             pinned: true,
-            leading: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: GestureDetector(
-                onTap: () {
-                  Navigator.pop(context);
-                },
-                child: Container(
-                  decoration: BoxDecoration(
-                      shape: BoxShape.circle, color: AppStyles.primaryColor),
-                  child: const Icon(
-                    Icons.arrow_back,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-            ),
+            iconTheme: IconThemeData(color: AppStyles.ticketBGColor), // Change the back icon color here
             expandedHeight: 300.0,
             flexibleSpace: FlexibleSpaceBar(
               titlePadding: EdgeInsets.only(bottom: size * 0.055),
