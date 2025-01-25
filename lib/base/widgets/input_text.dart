@@ -8,7 +8,6 @@ class InputText extends StatelessWidget {
     this.iconColor = const Color(0xFFBFC2DF),
     this.iconSize = 24.0,
     required this.prefixIcon,
-
     required this.controller,
     this.onTap, // Add onTap callback
   });
@@ -25,31 +24,46 @@ class InputText extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap, // Trigger onTap when the field is tapped
-      child: TextField(
-        controller: controller,
-        obscureText: obscureText,
-        decoration: InputDecoration(
-          prefixIcon: prefixIcon != null
-              ? Icon(
-            prefixIcon,
-            color: iconColor,
-          )
-              : null,
-          labelText: label,
-          labelStyle: TextStyle(color: Colors.grey, fontWeight: FontWeight.w400),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-            borderSide: BorderSide(color: Colors.purple, width: 2),
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-            borderSide: BorderSide(color: Colors.grey),
-          ),
-          fillColor: Colors.white,
-          filled: true,
-          contentPadding: EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white, // Background color
+          borderRadius: BorderRadius.circular(10), // Rounded corners
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.1), // Shadow color
+              offset: const Offset(0, 4), // Shadow offset
+              blurRadius: 8, // Shadow blur radius
+              spreadRadius: 2, // Shadow spread radius
+            ),
+          ],
         ),
-        onTap: onTap, // Call the onTap callback when the field is tapped
+        child: TextField(
+          controller: controller,
+          obscureText: obscureText,
+          decoration: InputDecoration(
+            prefixIcon: prefixIcon != null
+                ? Icon(
+                    prefixIcon,
+                    color: iconColor,
+                  )
+                : null,
+            labelText: label,
+            labelStyle:
+                TextStyle(color: Colors.grey, fontWeight: FontWeight.w400),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: BorderSide(color: Colors.purple, width: 2),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: BorderSide(color: Colors.grey),
+            ),
+            fillColor: Colors.white,
+            filled: true,
+            contentPadding: EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+          ),
+          onTap: onTap, // Call the onTap callback when the field is tapped
+        ),
       ),
     );
   }
