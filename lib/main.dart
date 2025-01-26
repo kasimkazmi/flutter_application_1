@@ -1,4 +1,3 @@
-import 'dart:io';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +16,6 @@ import 'package:flutter_application_1/screens/splash/splash_screen.dart';
 import 'package:flutter_application_1/screens/ticket/ticket_screen.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
-import 'package:path_provider/path_provider.dart';
 
 import 'controller/auth_controller.dart';
 import 'controller/user_controller.dart';
@@ -96,16 +94,20 @@ class MyApp extends StatelessWidget {
 
       // Use named routes for navigation throughout the app
       routes: {
-        AppRoutes.homePage: (context) => BottomNavBar(),
-        AppRoutes.allTickets: (context) => AllTickets(),
-        AppRoutes.ticketScreen: (context) => TicketScreen(),
-        AppRoutes.allHotelScreen: (context) => AllHotels(),
-        AppRoutes.hotelDetail: (context) => HotelDetail(),
+        // AUTH route
         AppRoutes.loginScreen: (context) => LoginScreen(),
         AppRoutes.registerScreen: (context) => RegisterScreen(),
-        AppRoutes.editScreen: (context) => EditProfile(),
         AppRoutes.forgotPasswordScreen: (context) => ForgotPasswordScreen(),
+
         AppRoutes.splashScreen: (context) => SplashScreen(),
+        AppRoutes.homePage: (context) => BottomNavBar(),
+
+        AppRoutes.allHotelScreen: (context) => AllHotels(),
+        AppRoutes.hotelDetail: (context) => HotelDetail(),
+        AppRoutes.allTickets: (context) => AllTickets(),
+        AppRoutes.ticketScreen: (context) => TicketScreen(),
+
+        AppRoutes.editScreen: (context) => EditProfile(),
         AppRoutes.blogDetails: (context) => BlogDetails(),
         AppRoutes.selectFlight: (context) => SelectFlight(),
       },

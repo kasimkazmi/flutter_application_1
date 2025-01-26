@@ -18,6 +18,9 @@ class AppMedia {
   static const cardImage2 = "$_baseImage/card_image_2.png";
   static const noImages = "$_baseImage/noImage.png";
 
+  static const flightCover = "$_baseImage/flight-cover.jpg";
+  static const flightCover1 = "$_baseImage/flight-cover1.jpg";
+
   static const String activeBookmarksIcon2 =
       "$_baseImage/bookmarks_icon_selected_2.png";
 }

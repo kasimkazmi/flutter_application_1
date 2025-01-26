@@ -17,6 +17,63 @@ class AppStyles {
   static Color profileStatusTextColor = const Color(0xFF526799);
   static Color tapBarBgColor = const Color(0xFFF4F6FD);
 
+  static const Gradient italianGradient = LinearGradient(
+    colors: [
+      Color(0xFFFF5673),
+      Color(0xFFFF8C48),
+    ],
+  );
+  static const Gradient chineseGradient = LinearGradient(
+    colors: [
+      Color(0xFFFF4665),
+      Color(0xFF832BF6),
+    ],
+  );
+  static const Gradient mexicanGradient = LinearGradient(
+    colors: [
+      Color(0xFF3B40FE),
+      Color(0xFF2DCEF8),
+    ],
+  );
+  static const Gradient thaiGradient = LinearGradient(
+    colors: [
+      Color(0xFF009DC5),
+      Color(0xFF21E590),
+    ],
+  );
+  static const Gradient arabianGradient = LinearGradient(
+    colors: [
+      Color(0xFFFF870E),
+      Color(0xFFD236D2),
+    ],
+  );
+  static const Gradient indianGradient = LinearGradient(
+    colors: [
+      Color(0xFF5C51FF),
+      Color(0xFFFE327E),
+    ],
+  );
+  static const Gradient americanGradient = LinearGradient(
+    colors: [
+      Color(0xFF2CE3F1),
+      Color(0xFF6143FF),
+    ],
+  );
+  static const Gradient koreanGradient = LinearGradient(
+    colors: [
+      Color(0xFFFF8C48),
+      Color(0xFFFF5673),
+    ],
+  );
+
+
+
+
+
+
+
+
+
   static const Color selectedTabColor = Color(0xFF4CAF50);
 
   static TextStyle textStyle = TextStyle(

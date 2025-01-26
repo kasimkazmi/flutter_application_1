@@ -1,21 +1,124 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/base/res/media.dart';
 
-class TravelCard extends StatelessWidget {
+class TravelCardList extends StatelessWidget {
   final Map<String, dynamic> data;
-
-  const TravelCard({super.key, required this.data});
+  TravelCardList({super.key, required this.data}) {
+    print("Travel=====>$data");
+  }
 
   @override
   Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal, // Horizontal scroll
+      child: Row(
+        children: List.generate(
+          data["destinations"].length, // Loop through all destinations
+          (index) {
+            var destination =
+                data["destinations"][index]; // Current destination
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: TravelCard(destination: destination),
+            );
+          },
+        ),
+      ),
+    );
+  }
+}
+
+class TravelCard extends StatelessWidget {
+  final Map<String, dynamic> destination;
+
+  const TravelCard({super.key, required this.destination});
+
+  @override
+  Widget build(BuildContext context) {
+    double cardWidth =
+        MediaQuery.of(context).size.width * 0.7; // 70% of screen width
+
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      width: cardWidth, // Adjust width of the card
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
         color: Colors.white,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.1),
+            color: Colors.black.withOpacity(0.1),
+            blurRadius: 10,
+            offset: const Offset(0, 5),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Destination name
+          Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Text(
+              destination["destination"] ??
+                  'Unknown Location', // Destination name
+              style: const TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          // Packages for the current destination
+          Expanded(
+            child: ScrollbarTheme(
+              data: ScrollbarThemeData(
+                thumbColor: WidgetStateProperty.all(Colors.blue), // Corrected
+                radius: Radius.circular(10),
+              ),
+              child: Scrollbar(
+                thumbVisibility: true,
+                child: SingleChildScrollView(
+                  scrollDirection:
+                      Axis.vertical, // Vertical scroll for packages
+                  child: Column(
+                    children: List.generate(
+                      destination["packages"].length, // Loop through packages
+                      (packageIndex) {
+                        var package = destination["packages"][packageIndex];
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: 12.0),
+                          child: TravelPackageCard(package: package),
+                        );
+                      },
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class TravelPackageCard extends StatelessWidget {
+  final Map<String, dynamic> package;
+
+  const TravelPackageCard({super.key, required this.package});
+
+  @override
+  Widget build(BuildContext context) {
+    double cardWidth =
+        MediaQuery.of(context).size.width * 0.7; // 70% of screen width
+
+    return Container(
+      width: cardWidth, // Adjust width of the package card
+      margin: const EdgeInsets.symmetric(horizontal: 16),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16),
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
             blurRadius: 10,
             offset: const Offset(0, 5),
           ),
@@ -28,16 +131,16 @@ class TravelCard extends StatelessWidget {
           Stack(
             children: [
               Container(
-                height: 180,
+                height: 150,
                 decoration: BoxDecoration(
                   borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(16),
                     topRight: Radius.circular(16),
                   ),
                   image: DecorationImage(
-                    image: AssetImage(
-                        data["image"] ?? AppMedia.noImages), // Fallback image
-                    fit: BoxFit.contain,
+                    image: AssetImage(package["image"] ??
+                        AppMedia.noImages), // Fallback image
+                    fit: BoxFit.cover,
                   ),
                 ),
               ),
@@ -52,7 +155,7 @@ class TravelCard extends StatelessWidget {
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Text(
-                    data["duration"] ?? 'N/A', // Fallback value
+                    package["duration"] ?? 'N/A', // Fallback value
                     style: const TextStyle(color: Colors.white, fontSize: 12),
                   ),
                 ),
@@ -74,7 +177,7 @@ class TravelCard extends StatelessWidget {
                 left: 8,
                 bottom: 8,
                 child: Row(
-                  children: (data["discounts"] as List<String>? ?? [])
+                  children: (package["discounts"] as List<String>? ?? [])
                       .map<Widget>((discount) {
                     return Padding(
                       padding: const EdgeInsets.only(right: 8.0),
@@ -103,20 +206,12 @@ class TravelCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  data["location"] ?? 'Unknown Location', // Fallback value
-                  style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 8),
                 Row(
                   children: [
                     const Icon(Icons.star, color: Colors.orange, size: 16),
                     const SizedBox(width: 4),
                     Text(
-                      "${data["rating"] ?? 'N/A'} (${data["reviews"] ?? '0'})", // Fallback values
+                      "${package["rating"] ?? 'N/A'} (${package["reviews"] ?? '0'})", // Fallback values
                       style: const TextStyle(fontSize: 12, color: Colors.grey),
                     ),
                   ],
@@ -126,17 +221,17 @@ class TravelCard extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     _buildIconInfo(Icons.flight,
-                        data["flights"] ?? 'N/A'), // Fallback value
-                    _buildIconInfo(
-                        Icons.hotel, data["hotel"] ?? 'N/A'), // Fallback value
+                        package["flights"] ?? 'N/A'), // Fallback value
+                    _buildIconInfo(Icons.hotel,
+                        package["hotel"] ?? 'N/A'), // Fallback value
                     _buildIconInfo(Icons.directions_car,
-                        data["transfers"] ?? 'N/A'), // Fallback value
+                        package["transfers"] ?? 'N/A'), // Fallback value
                   ],
                 ),
                 const SizedBox(height: 12),
                 Text.rich(
                   TextSpan(
-                    text: "\$${data["price"] ?? '0'}", // Fallback value
+                    text: "\$${package["price"] ?? '0'}", // Fallback value
                     style: const TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
@@ -155,7 +250,7 @@ class TravelCard extends StatelessWidget {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  data["description"] ??
+                  package["description"] ??
                       'No description available', // Fallback value
                   style: const TextStyle(fontSize: 12, color: Colors.grey),
                 ),

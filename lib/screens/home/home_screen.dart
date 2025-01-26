@@ -7,7 +7,6 @@ import 'package:flutter_application_1/screens/features/events/events_screen.dart
 import 'package:flutter_application_1/screens/features/flight/flight_screen.dart';
 import 'package:flutter_application_1/screens/features/food/food_screen.dart';
 import 'package:flutter_application_1/screens/features/hotel/hotel_search.dart';
-
 import 'package:flutter_application_1/screens/home/widgets/TravelCard.dart';
 import 'package:flutter_application_1/screens/home/widgets/hotel.dart';
 import 'package:flutter_application_1/screens/home/widgets/resort_card.dart';
@@ -18,7 +17,7 @@ import '../../base/res/styles/app_styles.dart';
 import '../../base/utils/app_routes.dart';
 import '../../base/utils/resort_list.dart';
 import '../../base/utils/values/top_tab_list.dart';
-import '../../base/utils/values/travel_package_list.dart';
+import '../../base/utils/travel_package_list.dart';
 import '../../base/widgets/app_section_heading.dart';
 import '../../controller/auth_controller.dart';
 import '../../controller/user_controller.dart';
@@ -36,8 +35,8 @@ class _HomeScreenState extends State<HomeScreen> {
   final UserController userController = Get.find<UserController>();
   final TextEditingController searchController = TextEditingController();
 
-  // Index of the selected tab in the clickable tab bar
-  int _selectedTabIndex = 0;
+  // Selected destination for the vacation package tab bar
+  String _selectedTabDestination = 'Default'; // Default value
 
   @override
   void initState() {
@@ -46,13 +45,6 @@ class _HomeScreenState extends State<HomeScreen> {
     if (authController.isLoggedIn.value) {
       userController.fetchUserDetails();
     }
-  }
-
-  // Method to update the selected tab index
-  void _onTabSelected(int index) {
-    setState(() {
-      _selectedTabIndex = index;
-    });
   }
 
   @override
@@ -166,15 +158,21 @@ class _HomeScreenState extends State<HomeScreen> {
           // ClickableTabBar for selecting vacation types
           ClickableTabBar(
             tabNames: tabNames.map((tab) => tab['type'] ?? 'Default').toList(),
-            selectedTabIndex: _selectedTabIndex,
-            onTabSelected: (index) {
-              _onTabSelected(index);
+            selectedTabDestination: _selectedTabDestination,
+            onTabSelected: (destination) {
+              setState(() {
+                _selectedTabDestination =
+                    destination; // Update the selected destination
+                // Load data based on the selected destination
+                print("Selected destination: $destination");
+                // Here you can load the data for the selected destination
+              });
             },
           ),
           // Display TravelCard based on the selected tab
           Expanded(
-            child: TravelCard(
-              data: _getTravelCardData(_selectedTabIndex),
+            child: TravelCardList(
+              data: _getTravelCardData(_selectedTabDestination),
             ),
           ),
         ],
@@ -182,12 +180,15 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  // Get data for TravelCard based on selected tab
-  Map<String, dynamic> _getTravelCardData(int index) {
-    if (travelPackages.isEmpty) {
-      return {"type": "No data available"}; // Fallback in case of empty data
-    }
-    return travelPackages[index % travelPackages.length];
+  // Get data for TravelCard based on selected destination
+  Map<String, dynamic> _getTravelCardData(String destination) {
+    // Find the travel package that matches the selected destination
+    final package = travelPackages.firstWhere(
+      (pkg) => pkg['destinationType'] == destination,
+      orElse: () =>
+          {"type": "No data available"}, // Fallback in case of no match
+    );
+    return package;
   }
 
   // "Near You" Section Header

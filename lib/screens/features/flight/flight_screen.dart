@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/base/res/media.dart';
 import 'package:flutter_application_1/base/res/styles/app_styles.dart';
 import 'package:flutter_application_1/base/utils/app_routes.dart';
 import 'package:flutter_application_1/base/widgets/app_button.dart';
@@ -9,7 +10,6 @@ import 'package:flutter_application_1/controller/flight_api_controller.dart';
 import 'package:flutter_application_1/screens/features/flight/widgets/increment_counter.dart';
 import 'package:flutter_application_1/screens/features/flight/widgets/promotion_cards.dart';
 import 'package:flutter_application_1/screens/features/flight/models/airport_model.dart';
-import 'package:get/get.dart';
 
 class FlightScreen extends StatefulWidget {
   const FlightScreen({super.key});
@@ -28,8 +28,33 @@ class _FlightScreenState extends State<FlightScreen> {
   Airport? _selectedDepartureAirport;
   Airport? _selectedArrivalAirport;
   String _selectedClassType = 'Economy'; // Default Class Type
-  int _numberOfPassengers = 1; // Default number of passengers
+  final int _numberOfPassengers = 1; // Default number of passengers
   final FlightApiController _apiController = FlightApiController();
+  final ScrollController _scrollController = ScrollController();
+  bool _isTitleVisible = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(() {
+      // Check if the scroll offset is greater than the height of the SliverAppBar
+      if (_scrollController.offset > 150.0 && !_isTitleVisible) {
+        setState(() {
+          _isTitleVisible = true; // Show title
+        });
+      } else if (_scrollController.offset <= 150.0 && _isTitleVisible) {
+        setState(() {
+          _isTitleVisible = false; // Hide title
+        });
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
 
   // Updates airport suggestions based on query
   Future<void> _updateSuggestions(
@@ -96,6 +121,7 @@ class _FlightScreenState extends State<FlightScreen> {
     return Scaffold(
       body: SafeArea(
         child: CustomScrollView(
+          controller: _scrollController,
           keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
           slivers: [
             _buildAppBar(),
@@ -106,31 +132,38 @@ class _FlightScreenState extends State<FlightScreen> {
     );
   }
 
-  // Builds the app bar
+  // AppBar
   Widget _buildAppBar() {
     return SliverAppBar(
       expandedHeight: 200.0,
+      titleTextStyle: AppStyles.headLineStyle2
+          .copyWith(fontSize: 29, color: AppStyles.ticketTopColor),
+      backgroundColor: AppStyles.bgColor,
       iconTheme: IconThemeData(
-          color: AppStyles.ticketBGColor), // Change the back icon color here
-
+          color: AppStyles.ticketTopColor), // Change the back icon color here
+      title: _isTitleVisible
+          ? Text("Search for flight")
+          : null, // Hide title when not visible
       floating: false,
       pinned: true,
-      backgroundColor: AppStyles.primaryColor,
       flexibleSpace: FlexibleSpaceBar(
-        title: Text(
-          "Search for flight",
-          style: AppStyles.headLineStyle2
-              .copyWith(fontSize: 29, color: AppStyles.bigDotColor),
-        ),
+        title: null, // Title is handled in the AppBar title
+        titlePadding:
+            EdgeInsets.only(left: 16.0, bottom: 16.0), // Adjust title position
         background: Container(
-          color: AppStyles.profileStatusTextColor,
-          padding: const EdgeInsets.symmetric(horizontal: 10),
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage(AppMedia.flightCover1), // Your image path
+              fit: BoxFit.fill, // Use BoxFit.cover for better scaling
+            ),
+          ),
         ),
+        collapseMode: CollapseMode.parallax, // Enable parallax effect
       ),
     );
   }
 
-  // Builds the main content
+  // Main content
   Widget _buildContent() {
     return SliverPadding(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
@@ -165,7 +198,7 @@ class _FlightScreenState extends State<FlightScreen> {
           if (_arrivalSuggestions.isNotEmpty)
             _buildSuggestionsList(arrivalController),
           const SizedBox(height: 15),
-
+          // Date & Passenger
           SizedBox(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -197,7 +230,7 @@ class _FlightScreenState extends State<FlightScreen> {
                     width:
                         15), // Space between date field and passenger controls
                 IncrementCounter(
-                  numberOfPassengers: 2,
+                  numberOfPassengers: _numberOfPassengers,
                   onChanged: (newCount) {
                     // Handle the change in passenger count
                   },
@@ -211,7 +244,7 @@ class _FlightScreenState extends State<FlightScreen> {
           ),
 
           const SizedBox(height: 30),
-
+          // dropDown for Class type
           CustomDropdown(
             label: 'Class',
             selectedValue: _selectedClassType,
@@ -248,13 +281,13 @@ class _FlightScreenState extends State<FlightScreen> {
           const SizedBox(height: 15),
 
           // Promotion Cards
-          // const PromotionCards(),
+          const PromotionCards(),
         ]),
       ),
     );
   }
 
-  // Builds a list of airport suggestions
+  // List of airport suggestions
   Widget _buildSuggestionsList(TextEditingController controller) {
     final suggestions = controller == departureController
         ? _departureSuggestions

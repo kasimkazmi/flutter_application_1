@@ -6,7 +6,6 @@ import 'package:flutter_application_1/base/widgets/gradient_circle_button.dart';
 import 'package:get/get.dart';
 
 import '../../base/utils/app_routes.dart';
-import '../../base/widgets/input_text.dart';
 import '../../controller/auth_service.dart';
 import '../../controller/validation_controller.dart';
 

@@ -8,7 +8,6 @@ class TopNavbar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12), // Optional padding

@@ -4,7 +4,6 @@ import 'package:flutter_application_1/base/res/styles/app_styles.dart';
 import 'package:flutter_application_1/screens/feed/feed_screen.dart';
 import 'package:flutter_application_1/screens/profile/profile_screen2.dart';
 import 'package:flutter_application_1/screens/ticket/ticket_screen.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 
 import '../controller/bottom_nav_controller.dart';
@@ -27,9 +26,6 @@ class BottomNavBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Obx(() {
       return Scaffold(
-        appBar: AppBar(
-          title: Text("${dotenv.env["APP_NAME"]}"),
-        ),
         body: IndexedStack(
           index: controller.selectedIndex.value,
           children: appScreen, // Ensure all screens are properly initialized
@@ -43,7 +39,7 @@ class BottomNavBar extends StatelessWidget {
             ),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.1),
+                color: Colors.black.withValues(alpha: 0.1),
                 blurRadius: 8,
                 offset: Offset(0, -4), // Shadows on the top of the bottom bar
               ),
