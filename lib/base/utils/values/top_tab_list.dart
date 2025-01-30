@@ -5,6 +5,7 @@ final List<Map<String, String>> tabNames = [
   {
     "type": 'America',
   },
+
   {
     "type": 'Europe',
   },
@@ -12,10 +13,8 @@ final List<Map<String, String>> tabNames = [
     "type": 'Asia',
   },
   {
-    "type": 'Mexico',
+    "type": 'Australia',
   },
-  {
-    "type": 'Japan',
-  },
+
   // Add more tabs as needed
 ];

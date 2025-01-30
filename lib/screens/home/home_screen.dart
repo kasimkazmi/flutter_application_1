@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/base/res/media.dart';
 import 'package:flutter_application_1/base/utils/hotel_list.dart';
 import 'package:flutter_application_1/base/utils/top_tab_list.dart';
+import 'package:flutter_application_1/base/widgets/InfiniteDraggableSlider.dart';
 import 'package:flutter_application_1/base/widgets/clickable_tab_bar.dart';
 import 'package:flutter_application_1/screens/features/events/events_screen.dart';
 import 'package:flutter_application_1/screens/features/flight/flight_screen.dart';
@@ -11,6 +12,7 @@ import 'package:flutter_application_1/screens/home/widgets/TravelCard.dart';
 import 'package:flutter_application_1/screens/home/widgets/hotel.dart';
 import 'package:flutter_application_1/screens/home/widgets/resort_card.dart';
 import 'package:flutter_application_1/screens/home/widgets/top_navbar.dart';
+import 'package:flutter_application_1/screens/home/widgets/travel_package_card.dart';
 import 'package:get/get.dart';
 
 import '../../base/res/styles/app_styles.dart';
@@ -36,7 +38,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final TextEditingController searchController = TextEditingController();
 
   // Selected destination for the vacation package tab bar
-  String _selectedTabDestination = 'Default'; // Default value
+  String _selectedTabDestination = 'All'; // Default value
 
   @override
   void initState() {
@@ -85,6 +87,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
             // Vacation package tab bar
             _buildTopTabBar(),
+            const SizedBox(height: 20),
+            _SwipeDragCard(context),
             const SizedBox(height: 20),
 
             // "Near You" section header
@@ -157,7 +161,7 @@ class _HomeScreenState extends State<HomeScreen> {
         children: [
           // ClickableTabBar for selecting vacation types
           ClickableTabBar(
-            tabNames: tabNames.map((tab) => tab['type'] ?? 'Default').toList(),
+            tabNames: tabNames.map((tab) => tab['type'] ?? 'All').toList(),
             selectedTabDestination: _selectedTabDestination,
             onTabSelected: (destination) {
               setState(() {
@@ -206,6 +210,37 @@ class _HomeScreenState extends State<HomeScreen> {
       leftText: "Top Picks",
       rightText: "See All",
       func: () => Navigator.pushNamed(context, AppRoutes.allHotelScreen),
+    );
+  }
+
+  // "Top Picks" Section Header
+  Widget _SwipeDragCard(BuildContext context) {
+    return InfiniteDraggableSlider(
+      itemCount: travelPackages.length,
+      itemBuilder: (context, index) {
+        // Get the destination details
+        final travelPackage = travelPackages[index];
+
+        // Use the first destination from the list of destinations
+        final destination = travelPackage["destinations"]?.first;
+        if (destination == null) {
+          return const SizedBox(); // Return empty widget if no destination found
+        }
+
+        // Use the first package from the destination's package list
+        final package = destination["packages"]?.first;
+        if (package == null) {
+          return const SizedBox(); // Return empty widget if no package found
+        }
+
+        // Pass the package data to the TravelPackageCard
+        return TravelPackageCards(
+          travelPackage: {
+            "destination": destination,
+            "package": package,
+          },
+        );
+      },
     );
   }
 

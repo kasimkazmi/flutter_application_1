@@ -8,7 +8,7 @@ class ThreeTabBar extends StatelessWidget {
     required this.middleTab,
     required this.rightTab,
     required this.selectedTabIndex,
-    required this.onTabSelected, // Callback to handle tab selection
+    required this.onTabSelected,
   });
 
   final String leftTab;

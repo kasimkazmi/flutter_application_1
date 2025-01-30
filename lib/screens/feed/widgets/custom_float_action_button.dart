@@ -26,11 +26,6 @@ class _CustomFloatingActionButtonState
   void initState() {
     super.initState();
 
-    // Initialize the animation
-    _addAnimation = CurvedAnimation(
-      parent: widget.animationController,
-      curve: Curves.linear,
-    );
   }
 
   @override

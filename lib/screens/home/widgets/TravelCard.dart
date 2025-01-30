@@ -4,7 +4,7 @@ import 'package:flutter_application_1/base/res/media.dart';
 class TravelCardList extends StatelessWidget {
   final Map<String, dynamic> data;
   TravelCardList({super.key, required this.data}) {
-    print("Travel=====>$data");
+    // print("Travel=====>$data");
   }
 
   @override

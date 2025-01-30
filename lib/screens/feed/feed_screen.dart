@@ -22,7 +22,6 @@ final AuthController authController = Get.find<AuthController>();
 final UserController userController = Get.find<UserController>();
 final TextEditingController searchController = TextEditingController();
 late AnimationController _animationController;
-late Animation<double> _addAnimation;
 
 class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
   @override
@@ -40,11 +39,6 @@ class _FeedScreenState extends State<FeedScreen> with TickerProviderStateMixin {
       duration: const Duration(milliseconds: 200),
     );
 
-    // Define the animation curve
-    _addAnimation = CurvedAnimation(
-      parent: _animationController,
-      curve: Curves.linear,
-    );
     // Start the animation (you can change this based on your interaction)
     _animationController.forward();
   }
